@@ -1,0 +1,81 @@
+﻿@model AppUser
+@{
+    ViewData["Titulo"] = "Crear un nuevo usuario";
+}
+<hr/>
+<h4>@ViewData["Titulo"]</h4>
+<hr/>
+<div class="container-fluid">
+    <form id="form-empresa" method="post" asp-controller="Empresas" asp-action="CrearUsuario">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="@Model.UserName" class="col-form-label">Nombre de usuario</label>
+                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" required autocomplete="off" />
+                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="@Model.Empresa.RutEmpresa" class="col-form-label">Rut de la empresa</label>
+                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control" autocomplete="off" />
+                    <span asp-validation-for="@Model.Empresa.RutEmpresa" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="@Model.Empresa.NombreEmpresa" class="col-form-label">Nombre de la empresa</label>
+                    <input asp-for="@Model.Empresa.NombreEmpresa" class="form-control" autocomplete="off" />
+                    <span asp-validation-for="@Model.Empresa.NombreEmpresa" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="@Model.Empresa.PersonaContacto" class="col-form-label"></label>
+                    <input asp-for="@Model.Empresa.PersonaContacto" class="form-control" autocomplete="off" />
+                    <span asp-validation-for="@Model.Empresa.PersonaContacto" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
+                    <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required/>
+                    <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label asp-for="@Model.Empresa.Direccion" class="col-form-label"></label>
+                        <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="@Model.Empresa.Direccion" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Email" class="col-form-label"></label>
+                        <input type="email" asp-for="@Model.Email" class="form-control" autocomplete="off" required />
+                        <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.PhoneNumber" class="col-form-label">Número de teléfono</label>
+                        <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" required/>
+                        <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row col-12 text-center">
+                <button type="submit" class="btn btn-success">Guardar</button>
+            </div>
+    </form>
+    <hr />
+</div>

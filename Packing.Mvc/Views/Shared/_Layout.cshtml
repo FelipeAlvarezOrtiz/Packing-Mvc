@@ -13,8 +13,12 @@
     <link rel="stylesheet" href="~/css/site.css" />
 
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
     <script src="https://kit.fontawesome.com/be7410e815.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
     @if (SignInManager.IsSignedIn(User))
@@ -22,7 +26,7 @@
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Packing.Mvc</a>
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-warehouse"></i>&nbsp;Packing</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -30,24 +34,24 @@
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i>&nbsp;Inicio</a>
                             </li>
                             @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Cliente"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Pedidos</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="far fa-list-alt"></i>&nbsp;Mis Pedidos</a>
                                 </li>
                             }
                             @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Administrador"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Pedidos</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="far fa-list-alt"></i>&nbsp;Pedidos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ConfiguracionUsuario">Usuarios</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ConfiguracionUsuario"><i class="fas fa-users"></i> &nbsp;Usuarios</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="VistaProductos">Productos</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="VistaProductos"><i class="fas fa-carrot"></i>&nbsp;Productos</a>
                                 </li>
                             }
                         </ul>

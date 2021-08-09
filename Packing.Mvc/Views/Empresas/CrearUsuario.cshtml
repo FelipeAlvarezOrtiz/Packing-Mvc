@@ -2,77 +2,104 @@
 @{
     ViewData["Titulo"] = "Crear un nuevo usuario";
 }
+<style>
+    .input-icons i {
+        position: absolute;
+    }
+          
+    .input-icons {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+          
+    .icon {
+        padding: 10px;
+        min-width: 40px;
+    }
+          
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+</style>
+
 <hr/>
-<h4>@ViewData["Titulo"]</h4>
+<h4><i class="fas fa-user-plus"></i>&nbsp;@ViewData["Titulo"]</h4>
 <hr/>
-<div class="container-fluid">
+<div class="container-fluid rounded-left border-left border-right" style="background-color: #F1F6F9 ">
     <form id="form-empresa" method="post" asp-controller="Empresas" asp-action="CrearUsuario">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="@Model.UserName" class="col-form-label">Nombre de usuario</label>
-                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" required autocomplete="off" />
-                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" required autocomplete="off"/>
+                    <span asp-validation-for="@Model.UserName" class="text-dangwer"></span>
                 </div>
             </div>
+            
+        </div>
+        <br/>
+        <h5><i class="far fa-building"></i>&nbsp;Datos de la empresa</h5>
+        <hr />
+        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.RutEmpresa" class="col-form-label">Rut de la empresa</label>
-                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control" autocomplete="off" />
+                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control" autocomplete="off" placeholder="11111111-3" />
                     <span asp-validation-for="@Model.Empresa.RutEmpresa" class="text-danger"></span>
                 </div>
             </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.NombreEmpresa" class="col-form-label">Nombre de la empresa</label>
                     <input asp-for="@Model.Empresa.NombreEmpresa" class="form-control" autocomplete="off" />
                     <span asp-validation-for="@Model.Empresa.NombreEmpresa" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-4">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label asp-for="@Model.Empresa.PersonaContacto" class="col-form-label"></label>
+                    <label asp-for="@Model.Empresa.PersonaContacto" class="col-form-label">Persona de contacto</label>
                     <input asp-for="@Model.Empresa.PersonaContacto" class="form-control" autocomplete="off" />
                     <span asp-validation-for="@Model.Empresa.PersonaContacto" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
-                    <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required/>
-                    <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
+                        <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required />
+                        <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
+                    </div>
                 </div>
-            </div>
         </div>
         <hr/>
         <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label asp-for="@Model.Empresa.Direccion" class="col-form-label"></label>
+                        <label asp-for="@Model.Empresa.Direccion" class="col-form-label"><i class="fas fa-map-marked-alt"></i>&nbsp;Dirección</label>
                         <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" />
                         <span asp-validation-for="@Model.Empresa.Direccion" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            <div class="row">
+        <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="@Model.Email" class="col-form-label"></label>
+                        <label asp-for="@Model.Email" class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
                         <input type="email" asp-for="@Model.Email" class="form-control" autocomplete="off" required />
                         <span asp-validation-for="@Model.Email" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label asp-for="@Model.PhoneNumber" class="col-form-label">Número de teléfono</label>
-                        <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" required/>
+                        <label asp-for="@Model.PhoneNumber" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
+                        <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" required placeholder="+569 987654321"/>
                         <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
+        </div>
             <div class="row col-12 text-center">
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>

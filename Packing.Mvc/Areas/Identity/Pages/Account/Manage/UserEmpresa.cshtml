@@ -9,8 +9,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <form id="empresa-form" method="post">
-            <div class="col-lg-10">
+        <div class="col-md-12">
+            <form id="empresa-form" method="post">
                 <div class="form-group">
                     <label asp-for="NombreEmpresa"></label>
                     <input asp-for="NombreEmpresa" class="form-control" />
@@ -32,15 +32,15 @@
                     <span asp-validation-for="Direccion" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Direccion"></label>
-                    <input asp-for="Direccion" class="form-control" />
-                    <span asp-validation-for="Direccion" class="text-danger"></span>
+                    <label asp-for="PersonaContacto">Persona de contacto</label>
+                    <input asp-for="PersonaContacto" class="form-control" />
+                    <span asp-validation-for="PersonaContacto" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="text-center">
-                <button id="change-empresas-button" type="submit" asp-page-handler="UpdateDatos" class="btn btn-primary">Actualizar datos</button>
-            </div>
-        </form>
+                <div class="text-center">
+                    <button id="change-empresas-button" type="submit" asp-page-handler="UpdateDatos" class="btn btn-primary">Actualizar datos</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

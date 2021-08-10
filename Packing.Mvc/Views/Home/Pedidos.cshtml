@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Listado de pedidos";
+    var Pedidos = ViewData["Pedidos"] as List<string>;
+}
+<h2><i class="fas fa-boxes"></i>&nbsp;@ViewData["Title"]</h2>
+<hr/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            @if (Pedidos is not null)
+            {
+                @if (Pedidos.Any())
+                {
+
+                }
+                else
+                {
+                <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No existen pedidos ingresados.</h4></div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;Ha ocurrido un error al recuperar los pedidos.</h4></div>
+            }
+        </div>
+    </div>
+    <div class="row">
+
+    </div>
+</div>

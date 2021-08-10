@@ -17,18 +17,19 @@
         }
     }
 </style>
-
+<h3><i class="fas fa-users"></i>&nbsp;Lista de Usuarios</h3>
+<hr/>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <table class="table table-responsive-lg table-striped table-bordered">
                 <thead class="thead-dark">
                     <tr>
-                        <th scope="col">Correo</th>
-                        <th class="priority5" scope="col">Empresa</th>
-                        <th class="priority4" scope="col">Razón Social</th>
-                        <th class="priority4" scope="col">Contacto</th>
-                        <th scope="col" class="text-center">Acciones</th>
+                        <th scope="col"><i class="fas fa-at"></i>&nbsp;Correo</th>
+                        <th class="priority5" scope="col"><i class="fas fa-building"></i>&nbsp;Empresa</th>
+                        <th class="priority4" scope="col"><i class="fas fa-copyright"></i>&nbsp;Razón Social</th>
+                        <th class="priority4" scope="col"><i class="fas fa-id-card"></i>&nbsp;Contacto</th>
+                        <th scope="col" class="text-center"><i class="far fa-edit"></i>&nbsp;Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,6 +51,6 @@
         </div>
     </div>
     <div class="text-center">
-        <a asp-controller="Empresas" asp-action="CrearUsuario" class="btn btn-success">Crear Usuario</a>
+        <a asp-controller="Empresas" asp-action="CrearUsuario" class="btn btn-success"><i class="fas fa-user-plus"></i>&nbsp;Crear Usuario</a>
     </div>
 </div>

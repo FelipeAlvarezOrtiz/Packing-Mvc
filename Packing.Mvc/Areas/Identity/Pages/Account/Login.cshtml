@@ -4,22 +4,25 @@
 @{
     ViewData["Title"] = "Ingresar al sistema";
 }
-
-<h1>@ViewData["Title"]</h1>
+<br/>
+<h2 class="text-center">@ViewData["Title"]</h2>
+<br/>
+<hr/>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-1"></div>
+    <div class="col-md-10 rounded-left">
         <section>
             <form id="account" method="post">
-                <h4>Usa tu correo asociado a la empresa para ingresar.</h4>
+                <h4 class="text-center">Usa tu correo asociado a la empresa para ingresar.</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Input.Email"></label>
+                    <label asp-for="Input.Email"><i class="far fa-user-circle"></i>&nbsp;Usuario</label>
                     <input asp-for="Input.Email" class="form-control" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.Password"></label>
+                    <label asp-for="Input.Password"><i class="fas fa-unlock-alt"></i>&nbsp;Contraseña</label>
                     <input asp-for="Input.Password" class="form-control" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
@@ -42,8 +45,9 @@
             </form>
         </section>
     </div>
+    <div class="col-md-1"></div>
 </div>
-
+<hr />
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

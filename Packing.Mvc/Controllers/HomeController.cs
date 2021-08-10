@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Packing.Mvc.Models;
@@ -27,14 +28,16 @@ namespace Packing.Mvc.Controllers
         }
 
         [Authorize(Roles = "Administrador,Cliente")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
         [Authorize]
-        public IActionResult Privacy()
+        public IActionResult Pedidos()
         {
+            var Pedidos = new List<string>();
+            ViewData["Pedidos"] = Pedidos;
             return View();
         }
 

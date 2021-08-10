@@ -11,14 +11,13 @@
     <title>@ViewData["Title"] - Packing</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-
     <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-        crossorigin="anonymous"></script>
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
     <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
     <script src="https://kit.fontawesome.com/be7410e815.js" crossorigin="anonymous"></script>
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     @if (SignInManager.IsSignedIn(User))
@@ -45,7 +44,7 @@
                             @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Administrador"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="far fa-list-alt"></i>&nbsp;Pedidos</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Pedidos"><i class="far fa-list-alt"></i>&nbsp;Pedidos</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ConfiguracionUsuario"><i class="fas fa-users"></i> &nbsp;Usuarios</a>
@@ -77,5 +76,16 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <ejs-scripts></ejs-scripts>
+    <script type="text/javascript">
+        function TuplaJson(nombre, variable, tipo) {
+            if (tipo !== undefined) {
+                if (tipo === 'B') { return "{'" + nombre + "':'" + variable + "'"; }
+                if (tipo === 'M') { return ",'" + nombre + "':'" + variable + "'"; }
+                if (tipo === 'E') { return ",'" + nombre + "':'" + variable + "'}"; }
+            } else {
+                return "{'" + nombre + "':'" + variable + "'}";
+            }
+        }
+    </script>
 </body>
 </html>

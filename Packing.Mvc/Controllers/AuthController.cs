@@ -1,9 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Packing.Mvc.Data;
 using Packing.Mvc.Models;
+using Packing.Mvc.Models.Empresas;
 
 namespace Packing.Mvc.Controllers
 {
@@ -14,12 +18,14 @@ namespace Packing.Mvc.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
+        private readonly ApplicationDbContext _context;
 
-        public AuthController(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager, IConfiguration config)
+        public AuthController(RoleManager<IdentityRole> roleManager, UserManager<AppUser> userManager, IConfiguration config,ApplicationDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _config = config;
+            _context = context;
         }
 
         [Route("Registrar")]
@@ -54,6 +60,14 @@ namespace Packing.Mvc.Controllers
                     await _roleManager.CreateAsync(new IdentityRole(rol));
                 }
             }
+        }
+
+        [HttpPost("Test"),Authorize(Roles="Administrador")]
+        public async Task<IActionResult> Prueba(Formato test)
+        {
+            Console.WriteLine($"Esto e es una {test.NombreFormato}");
+            await _context.Usuarios.ToListAsync();
+            return Ok();
         }
         
     }

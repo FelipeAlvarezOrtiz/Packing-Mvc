@@ -1,5 +1,9 @@
-﻿@{
+﻿@using Packing.Mvc.Models.Empresas
+@{
     var Productos = ViewData["Productos"] as List<Producto>;
+    var Grupos = ViewData["Grupos"] as List<GrupoProducto>;
+    var Formatos = ViewData["Formatos"] as List<Formato>;
+    var Presentaciones = ViewData["Presentaciones"] as List<Presentacion>;
 }
 <h2><i class="fas fa-boxes"></i>&nbsp;Lista de Productos</h2>
 <hr/>
@@ -8,7 +12,7 @@
         <div class="col-md-12">
             @if (Productos.Any())
             {
-                <table class="table table-responsive-lg table-striped table-bordered">
+                <table id="tablaProductos" class="table table-responsive-lg table-striped table-bordered">
                     <thead class="thead-dark">
                     <tr>
                         <th scope="col">Nombre</th>
@@ -39,11 +43,278 @@
             {
                 <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No existen productos creados</h4></div>
             }
+            <hr/>
+            @*<table id="tablaProductos" class="table table-responsive-lg table-striped table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th class="priority5" scope="col">Formato</th>
+                    <th class="priority4" scope="col">Grupo</th>
+                    <th class="priority4" scope="col">Presentación</th>
+                    <th scope="col" class="text-center">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Test1</td>
+                    <td class="priority5">test 1</td>
+                    <td class="priority4">test 1</td>
+                    <td class="priority4">test 1</td>
+                    <td class="text-center">
+                        <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="1">Editar</a>
+                        <a class="btn-sm btn-danger text-white">Borrar</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Test1</td>
+                    <td class="priority5">test 2</td>
+                    <td class="priority4">test 2</td>
+                    <td class="priority4">test 2</td>
+                    <td class="text-center">
+                        <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="2">Editar</a>
+                        <a class="btn-sm btn-danger text-white">Borrar</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Test1</td>
+                    <td class="priority5">test 3</td>
+                    <td class="priority4">test 3</td>
+                    <td class="priority4">test 3</td>
+                    <td class="text-center">
+                        <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="3">Editar</a>
+                        <a class="btn-sm btn-danger text-white">Borrar</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>*@
         </div>
     </div>
-    <br/>
+    <br />
     <div class="text-center">
-        <a asp-controller="Empresas" asp-action="CrearUsuario" class="btn btn-success">Crear Producto</a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearProducto">
+            Crear nuevo producto
+        </button>
     </div>
-    <hr/>
+    <hr />
 </div>
+
+<div class="modal fade" id="modalCrearProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreNuevoProducto" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-form-label">Formato</label>
+                            <div class="input-group">
+                                <select class="form-control" id="selectFormato">
+                                    @foreach (var formato in Formatos)
+                                    {
+                                        <option value="@formato.IdFormato">@formato.NombreFormato</option>
+                                    }
+                                </select>&nbsp;
+                                <button class="btn btn-outline-info" id="botonNuevoFormato" onclick="$('#modalNuevoFormato').modal('show')"><i class="fas fa-plus-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-form-label">Grupo</label>
+                            <div class="input-group">
+                                <select class="form-control">
+                                    @foreach (var grupo in Grupos)
+                                    {
+                                        <option value="@grupo.IdGrupo">@grupo.NombreGrupo</option>
+                                    }
+                                </select>&nbsp;
+                                <button class="btn btn-outline-info" id="botonNuevoGrupo" onclick="$('#modalNuevoGrupo').modal('show')"><i class="fas fa-plus-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-form-label">Presentación</label>
+                                <div class="input-group">
+                                    <select class="form-control">
+                                        @foreach (var presentacion in Presentaciones)
+                                        {
+                                            <option value="@presentacion.IdPresentacion">@presentacion.NombrePresentacion</option>
+                                        }
+                                    </select>&nbsp;
+                                    <button class="btn btn-outline-info" id="botonNuevaPresentacion" onclick="$('#modalNuevaPresentacion').modal('show')"><i class="fas fa-plus-circle"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="generarAlert()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNuevoGrupo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Grupo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-form-label" for="nuevoGrupoText" style="font-size: small;">Nuevo grupo (Ej. Zanahorias,Lechugas,etc.)</label>
+                                <input type="text" class="form-control" id="nuevoGrupoText" style="font-size: small;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNuevoFormato" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Formato</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-form-label" for="nuevoNombreFormato">Nombre</label>
+                                <input class="form-control" type="text" id="nuevoNombreFormato" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-form-label" style="font-size: small;" for="nuevaUnidadPorFormato">Unidades por formato</label>
+                                <input type="number" id="nuevaUnidadPorFormato" class="form-control" style="font-size: small;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNuevaPresentacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Formato</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-form-label" for="nuevoNombrePresentacion">Nombre</label>
+                                <input class="form-control" type="text" id="nuevoNombrePresentacion" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            $('#tablaProductos').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function generarAlert() {
+            let url = "@Url.Action("Prueba", "Auth")";
+            let prueba = "prueba";
+            let test2 = "prueba2";
+            let data = {
+                test : prueba,
+                test2 : test2
+            };
+            $.post(url,data).done(function(data) {
+                console.log("llegue");
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'success',
+                    confirmButtonText: 'Cool'
+                })
+                $('#modalCrearProducto').modal('hide');
+            }).fail(function(err) {
+                console.error(err.responseText);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Do you want to continue',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+            }).always(function() {
+                console.log("Siempre ejecutado");
+            });
+        }
+
+        function GuardarNuevoGrupo() {
+            let url = "@Url.Action("Prueba", "Auth")";
+        }
+    </script>
+}

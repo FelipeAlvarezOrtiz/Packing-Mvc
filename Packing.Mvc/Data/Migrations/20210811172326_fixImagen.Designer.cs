@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Packing.Mvc.Data;
 
 namespace Packing.Mvc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210811172326_fixImagen")]
+    partial class fixImagen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,74 +321,6 @@ namespace Packing.Mvc.Data.Migrations
                     b.ToTable("Presentaciones");
                 });
 
-            modelBuilder.Entity("Packing.Mvc.Models.Pedidos.DetallePedido", b =>
-                {
-                    b.Property<Guid>("IdDetalle")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("Cantidad")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("CantidadTotales")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("ProductoInternoIdProducto")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdDetalle");
-
-                    b.HasIndex("ProductoInternoIdProducto");
-
-                    b.ToTable("DetallePedidos");
-                });
-
-            modelBuilder.Entity("Packing.Mvc.Models.Pedidos.EstadoPedido", b =>
-                {
-                    b.Property<int>("IdEstadoPedido")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("NombreEstado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdEstadoPedido");
-
-                    b.ToTable("EstadosPedidos");
-                });
-
-            modelBuilder.Entity("Packing.Mvc.Models.Pedidos.Pedido", b =>
-                {
-                    b.Property<Guid>("GuidPedido")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("EmpresaMandanteIdEmpresa")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EstadoIdEstadoPedido")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaPedido")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaUltimaActualizacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Observacion")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("GuidPedido");
-
-                    b.HasIndex("EmpresaMandanteIdEmpresa");
-
-                    b.HasIndex("EstadoIdEstadoPedido");
-
-                    b.ToTable("Pedidos");
-                });
-
             modelBuilder.Entity("Packing.Mvc.Models.Producto", b =>
                 {
                     b.Property<int>("IdProducto")
@@ -493,30 +427,6 @@ namespace Packing.Mvc.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Packing.Mvc.Models.Pedidos.DetallePedido", b =>
-                {
-                    b.HasOne("Packing.Mvc.Models.Producto", "ProductoInterno")
-                        .WithMany()
-                        .HasForeignKey("ProductoInternoIdProducto");
-
-                    b.Navigation("ProductoInterno");
-                });
-
-            modelBuilder.Entity("Packing.Mvc.Models.Pedidos.Pedido", b =>
-                {
-                    b.HasOne("Packing.Mvc.Models.Empresas.Empresa", "EmpresaMandante")
-                        .WithMany()
-                        .HasForeignKey("EmpresaMandanteIdEmpresa");
-
-                    b.HasOne("Packing.Mvc.Models.Pedidos.EstadoPedido", "Estado")
-                        .WithMany()
-                        .HasForeignKey("EstadoIdEstadoPedido");
-
-                    b.Navigation("EmpresaMandante");
-
-                    b.Navigation("Estado");
                 });
 
             modelBuilder.Entity("Packing.Mvc.Models.Producto", b =>

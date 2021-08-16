@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Packing.Mvc.Models;
 using Packing.Mvc.Models.Empresas;
+using Packing.Mvc.Models.Pedidos;
 
 namespace Packing.Mvc.Data
 {
@@ -18,5 +19,8 @@ namespace Packing.Mvc.Data
         public DbSet<Presentacion> Presentaciones { get; set; }
         public DbSet<GrupoProducto> Grupos { get; set; }
         public DbSet<Formato> Formatos { get; set; }
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<EstadoPedido> EstadosPedidos { get; set; }
+        public DbSet<DetallePedido> DetallePedidos { get; set; }
     }
 }

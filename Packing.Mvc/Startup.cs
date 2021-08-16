@@ -35,6 +35,7 @@ namespace Packing.Mvc
                 })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddControllers(opt => opt.AllowEmptyInputInBodyModelBinding = true);
             services.AddControllersWithViews();
         }
 

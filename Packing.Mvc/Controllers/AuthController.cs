@@ -63,9 +63,9 @@ namespace Packing.Mvc.Controllers
         }
 
         [HttpPost("Test"),Authorize(Roles="Administrador")]
-        public async Task<IActionResult> Prueba(Formato test)
+        public async Task<IActionResult> Prueba([FromForm]string test,[FromForm]string test2)
         {
-            Console.WriteLine($"Esto e es una {test.NombreFormato}");
+            Console.WriteLine($"Esto e es una {test}");
             await _context.Usuarios.ToListAsync();
             return Ok();
         }

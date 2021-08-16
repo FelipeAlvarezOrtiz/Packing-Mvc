@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Packing.Mvc.Models;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -53,7 +54,15 @@ namespace Packing.Mvc.Controllers
         {
             var resultProductos = await _context.Productos.Include(prod => prod.Grupo)
                 .Include(x => x.Formato).Include(x => x.Presentacion).ToListAsync();
+            var resultGrupos = await _context.Grupos.ToListAsync();
+            var resultFormatos = await _context.Formatos.OrderBy(x => x.UnidadPorFormato).ToListAsync();
+            var resultPresentacion = await _context.Presentaciones.ToListAsync();
+
             ViewData["Productos"] = resultProductos;
+            ViewData["Grupos"] = resultGrupos;
+            ViewData["Formatos"] = resultFormatos;
+            ViewData["Presentaciones"] = resultPresentacion;
+
             return View();
         }
 

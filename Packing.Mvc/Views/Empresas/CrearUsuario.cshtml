@@ -6,17 +6,17 @@
     .input-icons i {
         position: absolute;
     }
-          
+
     .input-icons {
         width: 100%;
         margin-bottom: 10px;
     }
-          
+
     .icon {
         padding: 10px;
         min-width: 40px;
     }
-          
+
     .input-field {
         width: 100%;
         padding: 10px;
@@ -24,29 +24,40 @@
     }
 </style>
 
-<hr/>
+<hr />
 <h4><i class="fas fa-user-plus"></i>&nbsp;@ViewData["Titulo"]</h4>
-<hr/>
+<hr />
 <div class="container-fluid rounded-left border-left border-right" style="background-color: #F1F6F9 ">
     <form id="form-empresa" method="post" asp-controller="Empresas" asp-action="CrearUsuario">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.UserName" class="col-form-label">Nombre de usuario</label>
-                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" required autocomplete="off"/>
+                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" required autocomplete="off" />
                     <span asp-validation-for="@Model.UserName" class="text-dangwer"></span>
                 </div>
             </div>
-            
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="rolSelect" class="col-form-label">Rol del usuario</label>
+                    <select id="rolSelect" class="form-control">
+                        <option value="0">-- ROL --</option>
+                        <option value="1">-- Cliente --</option>
+                        <option value="2">-- Administrador de empresa --</option>
+                        <option value="3">-- Jefe de packing --</option>
+                        <option value="4">-- Cosechero --</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <br/>
+        <br />
         <h5><i class="far fa-building"></i>&nbsp;Datos de la empresa</h5>
         <hr />
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.RutEmpresa" class="col-form-label">Rut de la empresa</label>
-                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control" autocomplete="off" placeholder="11111111-3" />
+                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control validarRut" id="rutEmpresa" />
                     <span asp-validation-for="@Model.Empresa.RutEmpresa" class="text-danger"></span>
                 </div>
             </div>
@@ -66,43 +77,85 @@
                     <span asp-validation-for="@Model.Empresa.PersonaContacto" class="text-danger"></span>
                 </div>
             </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
-                        <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required />
-                        <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
-                    </div>
-                </div>
-        </div>
-        <hr/>
-        <div class="row">
-                <div class="col-md-12">
-                    <div class="form-group">
-                        <label asp-for="@Model.Empresa.Direccion" class="col-form-label"><i class="fas fa-map-marked-alt"></i>&nbsp;Dirección</label>
-                        <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" />
-                        <span asp-validation-for="@Model.Empresa.Direccion" class="text-danger"></span>
-                    </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
+                    <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required />
+                    <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
                 </div>
             </div>
-        <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="@Model.Email" class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
-                        <input type="email" asp-for="@Model.Email" class="form-control" autocomplete="off" required />
-                        <span asp-validation-for="@Model.Email" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="@Model.PhoneNumber" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
-                        <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" required placeholder="+569 987654321"/>
-                        <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
-                    </div>
-                </div>
         </div>
-            <div class="row col-12 text-center">
-                <button type="submit" class="btn btn-success">Guardar</button>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="@Model.Empresa.Direccion" class="col-form-label"><i class="fas fa-map-marked-alt"></i>&nbsp;Dirección</label>
+                    <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" />
+                    <span asp-validation-for="@Model.Empresa.Direccion" class="text-danger"></span>
+                </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="@Model.Email" class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
+                    <input type="email" asp-for="@Model.Email" class="form-control email" autocomplete="off" required />
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="@Model.PhoneNumber" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
+                    <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" required placeholder="+569 987654321" />
+                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row col-12 text-center">
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
     </form>
     <hr />
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function() {
+            
+        });
+
+        function borrarUsuario() {
+            Swal.fire({
+                title: '¿Estás seguro de eliminar al usuario?',
+                text: "Esta opción no puede deshacerse.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url = "@Url.Action("EnviarCorreo", "PedidosApi")";
+                    $.post(url).done(function (data) {
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El usuario ha sido desactivado correctamente.',
+                            'success',
+                        );
+                    }).fail(function(err) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Ha ocurrido un error al eliminar al usuario',
+                            icon: 'error',
+                            confirmButtonText: 'Cool'
+                        });
+                    }).always(function() {
+                        console.log("Siempre ejecutado");
+                    });
+                }
+            });
+        }
+    </script>
+}

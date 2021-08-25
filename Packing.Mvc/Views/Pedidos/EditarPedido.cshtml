@@ -1,0 +1,140 @@
+﻿@{
+    var guidPedido = ViewData["PedidoId"] as string;
+}
+<h2><i class="far fa-edit"></i>&nbsp;Editar Pedido</h2>
+<hr />
+<div class="container-fluid">
+    <div class="alert alert-danger text-center" id="alertaRechazo" hidden><h4>ESTE PEDIDO HA SIDO RECHAZADO POR GERENTA DE OPERACIONES.</h4></div>
+    <h5><i class="far fa-building"></i>&nbsp;Datos de la empresa</h5>
+    <div id="infoEmpresa" class="p-3 rounded-left border-left border-right" style="background-color: #F1F6F9">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-form-label">Empresa</label>
+                    <input id="nombreEmpresa" type="text" class="form-control" value="Punto Azul S.A." disabled />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-form-label">Persona de contacto</label>
+                    <input id="personaContacto" type="text" class="form-control" value="Contacto de prueba" disabled />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-form-label">Teléfono</label>
+                    <input id="telefonoEmpresa" type="text" class="form-control" value="+569 44194679" disabled />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-form-label">Email</label>
+                    <input id="emailEmpresa" type="text" class="form-control" value="me@felipealvarez.dev" disabled />
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <h5><i class="fas fa-shopping-cart"></i>&nbsp;Datos del pedido</h5>
+    <div id="datosPedido" class="row p-3">
+        <div class="col-md-12">
+            <table id="tablaPedidoInfo" class="table table-responsive-lg table-striped table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Producto</th>
+                    <th class="priority5" scope="col">Formato</th>
+                    <th class="priority4" scope="col">Presentación</th>
+                    <th class="priority3" scope="col">Cantidad</th>
+                    <th class="priority2" scope="col">Unidades</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Brocoli bolsa</td>
+                    <td class="priority5">10x1</td>
+                    <td class="priority4">Caja hortalicera</td>
+                    <td class="text-center">1.000</td>
+                    <td class="text-center">10.000</td>
+                </tr>
+                <tr>
+                    <td>Repollo Morado film</td>
+                    <td class="priority5">6x1</td>
+                    <td class="priority4">Caja hortalicera</td>
+                    <td class="text-center">1.500</td>
+                    <td class="text-center">9.000</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <h5><i class="fas fa-info-circle"></i>&nbsp;Actualizar estado</h5>
+    <div id="accionesPedido">
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-form-label">Estado</label>
+                    <select class="form-control">
+                        <option value="0">-- RECIBIDO --</option>
+                        <option value="1">-- PROCESANDO --</option>
+                        <option value="2">-- DESPACHADO --</option>
+                        <option value="3">-- ENTREGADO --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-md-2">
+                <button class="btn btn-danger" id="btnRechazarPedido" onclick="RechazarPedido()">Rechazar</button>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-2">
+                <button class="btn btn-success">Actualizar info.</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tablaPedidoInfo').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function RechazarPedido() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Este proceso enviará una notificación al cliente.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Rechazar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        '¡Rechazado!',
+                        'Se ha enviado un email de confirmación.',
+                        'success'
+                    );
+                    document.getElementById('alertaRechazo').removeAttribute('hidden');
+                }
+            });
+        }
+    </script>
+}

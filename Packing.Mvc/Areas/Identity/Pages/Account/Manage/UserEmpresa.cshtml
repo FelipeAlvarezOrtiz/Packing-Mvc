@@ -13,12 +13,12 @@
             <form id="empresa-form" method="post">
                 <div class="form-group">
                     <label asp-for="NombreEmpresa"></label>
-                    <input asp-for="NombreEmpresa" class="form-control" />
+                    <input asp-for="NombreEmpresa" class="form-control" disabled />
                     <span asp-validation-for="NombreEmpresa" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="RazonSocial"></label>
-                    <input asp-for="RazonSocial" class="form-control" />
+                    <input asp-for="RazonSocial" class="form-control" disabled />
                     <span asp-validation-for="RazonSocial" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -28,23 +28,47 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Direccion"></label>
-                    <input asp-for="Direccion" class="form-control" />
+                    <input asp-for="Direccion" class="form-control" disabled />
                     <span asp-validation-for="Direccion" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="PersonaContacto">Persona de contacto</label>
-                    <input asp-for="PersonaContacto" class="form-control" />
+                    <input asp-for="PersonaContacto" class="form-control" disabled />
                     <span asp-validation-for="PersonaContacto" class="text-danger"></span>
                 </div>
-                <div class="text-center">
-                    <button id="change-empresas-button" type="submit" asp-page-handler="UpdateDatos" class="btn btn-primary">Actualizar datos</button>
-                </div>
+                
             </form>
+        </div>
+        <div class="text-center ml-5">
+            @*<button id="change-empresas-button" type="submit" asp-page-handler="UpdateDatos" class="btn btn-primary">Actualizar datos</button>*@
+            <button class="btn btn-success" onclick="ActualizarDatos()">Actualizar datos</button>
         </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        function ActualizarDatos() {
+            Swal.fire({
+                title: 'Confirmación',
+                text: "Este proceso enviará una notificación a la gerenta de operaciones para confirmar nuevos datos.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Solicitar actualización',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        '¡Confirmado!',
+                        'Se ha enviado un email de confirmación.',
+                        'success'
+                    );
+                }
+            });
+        }
+    </script>
 }
 

@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Packing.Mvc.Data;
 using Packing.Mvc.Models;
+using Packing.Mvc.Servicios;
+using Packing.Mvc.Servicios.Interfaces;
 
 namespace Packing.Mvc
 {
@@ -21,6 +24,8 @@ namespace Packing.Mvc
         
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IEnviadorCorreos, EnviadorCorreos>();
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -35,7 +40,11 @@ namespace Packing.Mvc
                 })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllers(opt => opt.AllowEmptyInputInBodyModelBinding = true);
+            
+            services.AddControllers(opt =>
+                {
+                    opt.AllowEmptyInputInBodyModelBinding = true;
+                });
             services.AddControllersWithViews();
         }
 

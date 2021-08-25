@@ -3,6 +3,97 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h4 class="display-4">Bienvenido, tiene notificaciones sin revisar</h4>
+</div>
+<hr/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <h5>
+                    <i class="fas fa-exclamation-circle"></i>&nbsp;Tiene nuevos pedidos sin procesar &nbsp;
+                    <a class="btn btn-info" asp-area="" asp-controller="Home" asp-action="Pedidos">
+                        <i class="far fa-list-alt"></i>&nbsp;Ir a Pedidos
+                    </a>
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger">
+                <h5>
+                    <i class="fas fa-exclamation-triangle"></i>&nbsp;Algunos usuarios han solicitado cambio de datos &nbsp;
+                    <a class="btn btn-info" asp-area="" asp-controller="Home" asp-action="ConfiguracionUsuario">
+                        <i class="far fa-list-alt"></i>&nbsp;Ir a Usuarios
+                    </a>
+                </h5>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h4><i class="fas fa-info"></i>&nbsp;Accesos directos</h4>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4 p-1">
+            <div class="card bg-light" style="width: 18rem;">
+                <br />
+                <div class="text-center">
+                    <h2>
+                        <i class="card-img-top fas fa-users fa-3x"></i>
+                    </h2>
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">Usuarios</h5>
+                    <a asp-controller="Home" asp-action="ConfiguracionUsuario" class="btn btn-primary">Ir a usuarios</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 p-1">
+            <div class="card bg-light" style="width: 18rem;">
+                <br />
+                <div class="text-center">
+                    <h2>
+                        <i class="card-img-top fas fa-carrot fa-3x"></i>
+                    </h2>
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">Productos</h5>
+                    <a asp-controller="Home" asp-action="VistaProductos" class="btn btn-primary">Ir a productos</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 p-1">
+            <div class="card bg-light" style="width: 18rem;">
+                <br />
+                <div class="text-center">
+                    <h2>
+                        <i class="card-img-top far fa-list-alt fa-3x"></i>
+                    </h2>
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">Pedidos</h5>
+                    <a asp-controller="Home" asp-action="Pedidos" class="btn btn-primary">Ir a pedidos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-4 p-1">
+            <div class="card bg-light" style="width: 18rem;">
+                <br />
+                <div class="text-center">
+                    <h2>
+                        <i class="card-img-top far fa-user fa-3x"></i>
+                    </h2>
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title">Perfil</h5>
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="btn btn-primary">Ir a mi perfil</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 m-1"></div>
+        <div class="col-md-4 m-1"></div>
+        </div>
 </div>

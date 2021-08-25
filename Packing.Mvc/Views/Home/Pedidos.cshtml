@@ -2,20 +2,80 @@
     ViewData["Title"] = "Listado de pedidos";
     var Pedidos = ViewData["Pedidos"] as List<string>;
 }
-<h2><i class="fas fa-boxes"></i>&nbsp;@ViewData["Title"]</h2>
-<hr/>
+<h3>&nbsp;Pedidos en sistema</h3>
+<hr />
 <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="desdeFecha" class="col-form-label">Desde</label>
+                <input id="desdeFecha" type="date" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="hastaFecha" class="col-form-label">Hasta: </label>
+                <input id="hastaFecha" type="date" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="desdeFecha" class="col-form-label">Empresa</label>
+                <select id="empresaId" class="form-control">
+                    <option value="0">--Seleccione empresa --</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row col-12 text-center">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-info"><i class="fas fa-filter"></i>&nbsp;Filtrar</button>
+        </div>
+    </div>
+    <h4><i class="fas fa-boxes"></i>&nbsp;@ViewData["Title"]</h4>
+    <hr />
     <div class="row">
         <div class="col-12">
             @if (Pedidos is not null)
             {
                 @if (Pedidos.Any())
                 {
-
+                    <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No existen pedidos ingresados.</h4></div>
                 }
                 else
                 {
-                <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No existen pedidos ingresados.</h4></div>
+                    <table id="tablaPedidos" class="table table-responsive-lg table-striped table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Empresa</th>
+                                <th class="priority5" scope="col">Fecha Ingreso</th>
+                                <th class="priority4" scope="col">Estado</th>
+                                <th class="priority3" scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Punto Azul S.A.</td>
+                                <td class="priority5">17/08/2021</td>
+                                <td class="priority4">Ingresada</td>
+                                <td class="text-center">
+                                    <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@(Guid.NewGuid())">Detalles</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Punto Azul S.A.</td>
+                                <td class="priority5">18/08/2021</td>
+                                <td class="priority4">Ingresada</td>
+                                <td class="text-center">
+                                    <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@(Guid.NewGuid())">Detalles</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 }
             }
             else
@@ -24,7 +84,79 @@
             }
         </div>
     </div>
+    <hr />
     <div class="row">
-
+        <div class="col-12 text-center alert alert-info">
+            <h5><i class="fas fa-wrench"></i>&nbsp;Opciones de información para trabajadores</h5>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-form-label">Seleccione cosechero</label>
+                <select class="form-control">
+                    <option value="0">--SIN ASIGNAR--</option>
+                    <option value="0">COSECHERO DE PRUEBA</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-form-label">Seleccione jefe de packing</label>
+                <select class="form-control">
+                    <option value="0">--SIN ASIGNAR--</option>
+                    <option value="0">JEFE DE PRUEBA</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <a class="btn btn-success" href="https://wa.me/56944194679?text=Necesito%2015000%20repollos%20para%20cosechar%20" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i>&nbsp;Enviar información</a>
+        </div>
+    </div>
+    <hr />
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tablaPedidos').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function RechazarPedido() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Este proceso enviará una notificación al cliente.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Rechazar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        '¡Rechazado!',
+                        'Se ha enviado un email de confirmación.',
+                        'success'
+                    );
+                    document.getElementById('alertaRechazo').removeAttribute('hidden');
+                }
+            });
+        }
+    </script>
+}

@@ -74,27 +74,29 @@
         <div class="col-12">
             <table id="usuariosColonos" class="table table-responsive-lg table-striped table-bordered">
                 <thead class="thead-dark">
-                    <tr>
-                        <th scope="col"><i class="fas fa-id-card"></i>&nbsp;Usuario</th>
-                        <th class="priority5" scope="col"><i class="fas fa-briefcase"></i>&nbsp;Cargo</th>
-                        <th class="priority4" scope="col"><i class="fas fa-phone"></i>&nbsp;Telefono</th>
-                        <th class="priority4" scope="col"><i class="fas fa-at"></i>&nbsp;Correo</th>
-                        <th scope="col" class="text-center"><i class="far fa-edit"></i>&nbsp;Acciones</th>
-                    </tr>
+                <tr>
+                    <th scope="col"><i class="fas fa-id-card"></i>&nbsp;Usuario</th>
+                    <th class="priority5" scope="col"><i class="fas fa-briefcase"></i>&nbsp;Cargo</th>
+                    <th class="priority4" scope="col"><i class="fas fa-phone"></i>&nbsp;Telefono</th>
+                    <th class="priority4" scope="col"><i class="fas fa-at"></i>&nbsp;Correo</th>
+                    <th scope="col" class="text-center"><i class="far fa-edit"></i>&nbsp;Acciones</th>
+                </tr>
                 </thead>
                 <tbody>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="text-center">
-        <a asp-controller="Empresas" asp-action="CrearUsuario" class="btn btn-success"><i class="fas fa-user-plus"></i>&nbsp;Crear usuario de empresa</a>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6 d-flex justify-content-center">
+            <a asp-controller="Empresas" asp-action="CrearUsuario" class="btn btn-success"><i class="fas fa-user-plus"></i>&nbsp;Crear usuario de empresa</a>
+        </div>
+        <div class="col-md-6 d-flex justify-content-center">
+            <a asp-controller="Empresas" asp-action="VistaRoles" class="btn btn-info" id="botonRoles"><i class="fas fa-user-tag"></i>&nbsp;Agregar nuevos roles</a>
+        </div>
     </div>
 </div>
-
-@*<div class="container-fluid d-flex justify-content-center" id="cargando" hidden>
-    <div class="loader"></div>
-</div>*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

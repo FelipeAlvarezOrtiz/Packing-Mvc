@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Packing.Mvc.Data;
 using Packing.Mvc.Models;
 
@@ -31,5 +36,18 @@ namespace Packing.Mvc.Controllers
             return View();
         }
 
+        public async Task<IActionResult> VistaRoles()
+        {
+            ViewData["listaRoles"] = await ObtenerRolEnSistema();
+            return View();
+        }
+
+        public async Task<List<string>> ObtenerRolEnSistema()
+        {
+            var result = await _roleManager.Roles.ToListAsync();
+            var payload = new List<string>(result.Count);
+            payload.AddRange(result.Select(identityRole => identityRole.Name));
+            return payload;
+        }
     }
 }

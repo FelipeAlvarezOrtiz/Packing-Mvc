@@ -1,0 +1,81 @@
+﻿@{
+    var listaRoles = ViewData["listaRoles"] as List<string>;
+    var contadorRoles = 1;
+}
+<h3><i class="fas fa-user-tag"></i>&nbsp;Roles</h3>
+<hr />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <table id="tablaRoles" class="table table-responsive-lg table-striped table-bordered">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">&nbsp;#</th>
+                    <th class="text-center" scope="col">&nbsp;Nombre del rol</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var role in listaRoles)
+                {
+                    <tr>
+                        <td>@contadorRoles</td>
+                        <td class="text-center">@role</td>
+                    </tr>
+                    @(contadorRoles++)
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">Nuevo rol</button>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo rol</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label for="inputRol" class="col-sm-4 col-form-label">Nuevo rol</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="inputRol" placeholder="rol">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tablaRoles').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function CrearRol() {
+            
+        }
+    </script>
+}

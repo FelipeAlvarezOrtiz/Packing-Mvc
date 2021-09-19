@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -69,6 +71,25 @@ namespace Packing.Mvc.Controllers
             await _context.Usuarios.ToListAsync();
             return Ok();
         }
+
+        [HttpPost("CrearRol"), Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> CrearRole([FromForm]string nuevoRol)
+        {
+            if (await _roleManager.RoleExistsAsync(nuevoRol)) return BadRequest("El rol ya existe");
+            await _roleManager.CreateAsync(new IdentityRole(nuevoRol));
+            return Ok("Creado exitosamente");
+        }
         
+
+        //CREAR UN ENDPOINT EXCLUSIVO PARA EMPRESAS
+        [HttpGet("ObtenerRoles"), Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> ObtenerRolParaAdmin()
+        {
+            var result = await _roleManager.Roles.ToListAsync();
+            var payload = new List<string>(result.Count);
+            payload.AddRange(result.Select(identityRole => identityRole.Name));
+            
+            return payload.Count > 0 ? Ok(payload) : NotFound("No se han encontrado datos");
+        }
     }
 }

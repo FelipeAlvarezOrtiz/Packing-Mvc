@@ -20,12 +20,14 @@ namespace Packing.Mvc.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
         private readonly IEnviadorCorreos EmailSender;
+        private readonly ICarroCompra _carroCompra;
 
-        public PedidosApiController(ApplicationDbContext context, IConfiguration config, IEnviadorCorreos emailSender)
+        public PedidosApiController(ApplicationDbContext context, IConfiguration config, IEnviadorCorreos emailSender, ICarroCompra carroCompra)
         {
             _context = context;
             _config = config;
             EmailSender = emailSender;
+            _carroCompra = carroCompra;
         }
 
         [HttpPost("InsertarCabecera"), Authorize]

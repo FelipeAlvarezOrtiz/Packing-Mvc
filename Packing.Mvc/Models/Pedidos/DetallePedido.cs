@@ -11,4 +11,6 @@ namespace Packing.Mvc.Models.Pedidos
         public uint Cantidad { get; set; }
         public uint CantidadTotales { get; set; }
     }
+
+    public record DetallePedidoDto(Producto productoDto,int cantidad);
 }

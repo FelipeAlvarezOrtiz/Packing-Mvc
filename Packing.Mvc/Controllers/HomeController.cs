@@ -8,10 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Packing.Mvc.Data;
-using Packing.Mvc.Servicios;
 using Packing.Mvc.Servicios.Interfaces;
 
 namespace Packing.Mvc.Controllers
@@ -23,14 +21,18 @@ namespace Packing.Mvc.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ApplicationDbContext _context;
         private readonly IEnviadorCorreos EmailSender;
+        private readonly ICarroCompra CarroCompra;
+
         public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, 
-                                SignInManager<AppUser> signInManager, ApplicationDbContext context, IEnviadorCorreos emailSender)
+                                SignInManager<AppUser> signInManager, ApplicationDbContext context, IEnviadorCorreos emailSender, 
+                                ICarroCompra carroCompra)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
             EmailSender = emailSender;
+            CarroCompra = carroCompra;
         }
 
         [Authorize(Roles = "Administrador,Cliente")]
@@ -62,6 +64,10 @@ namespace Packing.Mvc.Controllers
             var resultGrupos = await _context.Grupos.ToListAsync();
             var resultFormatos = await _context.Formatos.OrderBy(x => x.UnidadPorFormato).ToListAsync();
             var resultPresentacion = await _context.Presentaciones.ToListAsync();
+            
+            CarroCompra.InsertarProductoAlCarro("Producto de prueba xdxd");
+            var carros = CarroCompra.ObtenerProductosDelCarro();
+            ViewData["Carrito"] = carros;
 
             ViewData["Productos"] = resultProductos;
             ViewData["Grupos"] = resultGrupos;

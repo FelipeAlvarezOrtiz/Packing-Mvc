@@ -57,6 +57,7 @@ namespace Packing.Mvc.Controllers
             return View();
         }
 
+        [Authorize]
         public async Task<IActionResult> VistaProductos()
         {
             var resultProductos = await _context.Productos.Include(prod => prod.Grupo)
@@ -64,8 +65,10 @@ namespace Packing.Mvc.Controllers
             var resultGrupos = await _context.Grupos.ToListAsync();
             var resultFormatos = await _context.Formatos.OrderBy(x => x.UnidadPorFormato).ToListAsync();
             var resultPresentacion = await _context.Presentaciones.ToListAsync();
-            
-            CarroCompra.InsertarProductoAlCarro("Producto de prueba xdxd");
+
+            var usuarioLoggeado = User.Identity.Name;
+
+            //CarroCompra.InsertarProductoAlCarro("Producto de prueba xdxd");
             var carros = CarroCompra.ObtenerProductosDelCarro();
             ViewData["Carrito"] = carros;
 

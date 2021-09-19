@@ -27,7 +27,7 @@ namespace Packing.Mvc
             services.AddSingleton<ICarroCompra, CarritoCompra>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("Conexion")));
+                    Configuration.GetConnectionString("Azure")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<AppUser>(options =>

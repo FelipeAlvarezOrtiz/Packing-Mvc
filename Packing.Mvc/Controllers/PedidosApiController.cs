@@ -19,14 +19,14 @@ namespace Packing.Mvc.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
-        private readonly IEnviadorCorreos EmailSender;
+        private readonly IEnviadorCorreos _emailSender;
         private readonly ICarroCompra _carroCompra;
 
         public PedidosApiController(ApplicationDbContext context, IConfiguration config, IEnviadorCorreos emailSender, ICarroCompra carroCompra)
         {
             _context = context;
             _config = config;
-            EmailSender = emailSender;
+            _emailSender = emailSender;
             _carroCompra = carroCompra;
         }
 
@@ -82,7 +82,7 @@ namespace Packing.Mvc.Controllers
         [HttpPost("EnviarCorreo"), Authorize]
         public async Task<IActionResult> EnviarCorreo()
         {
-            EmailSender.EnviarEmail("mbertolla@loscolonos.cl", "Cliente de prueba solicita actualización de datos", "<p>Han solicitado un cambio de datos</p>");
+            _emailSender.EnviarEmail("mbertolla@loscolonos.cl", "Cliente de prueba solicita actualización de datos", "<p>Han solicitado un cambio de datos</p>");
             return Ok();
         }
     }

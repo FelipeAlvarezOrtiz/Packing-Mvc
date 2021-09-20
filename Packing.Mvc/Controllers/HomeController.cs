@@ -66,17 +66,11 @@ namespace Packing.Mvc.Controllers
             var resultFormatos = await _context.Formatos.OrderBy(x => x.UnidadPorFormato).ToListAsync();
             var resultPresentacion = await _context.Presentaciones.ToListAsync();
 
-            var usuarioLoggeado = User.Identity.Name;
-
-            //CarroCompra.InsertarProductoAlCarro("Producto de prueba xdxd");
-            var carros = CarroCompra.ObtenerProductosDelCarro();
-            ViewData["Carrito"] = carros;
-
             ViewData["Productos"] = resultProductos;
             ViewData["Grupos"] = resultGrupos;
             ViewData["Formatos"] = resultFormatos;
             ViewData["Presentaciones"] = resultPresentacion;
-            //EmailSender.EnviarEmail("mbertolla@loscolones.cl", "Cliente de prueba solicita actualización de datos", "<p>Han solicitado un cambio de datos</p>");
+            
             return View();
         }
         

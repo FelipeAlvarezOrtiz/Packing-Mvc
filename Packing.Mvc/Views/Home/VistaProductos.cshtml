@@ -31,7 +31,7 @@
                             <td class="priority4">@Producto.Grupo.NombreGrupo</td>
                             <td class="priority4">@Producto.Presentacion.NombrePresentacion</td>
                             <td class="text-center">
-                                <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="@Producto.IdProducto">Editar</a>
+                                <a class="btn-sm btn-info" asp-controller="VistaProductos" asp-action="EditarProducto" asp-route-idProducto="@Producto.IdProducto">Editar</a>
                                 <a class="btn-sm btn-danger text-white">Borrar</a>
                             </td>
                         </tr>
@@ -44,49 +44,6 @@
                 <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No existen productos creados</h4></div>
             }
             <hr/>
-            @*<table id="tablaProductos" class="table table-responsive-lg table-striped table-bordered">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Nombre</th>
-                    <th class="priority5" scope="col">Formato</th>
-                    <th class="priority4" scope="col">Grupo</th>
-                    <th class="priority4" scope="col">Presentación</th>
-                    <th scope="col" class="text-center">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Test1</td>
-                    <td class="priority5">test 1</td>
-                    <td class="priority4">test 1</td>
-                    <td class="priority4">test 1</td>
-                    <td class="text-center">
-                        <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="1">Editar</a>
-                        <a class="btn-sm btn-danger text-white">Borrar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Test1</td>
-                    <td class="priority5">test 2</td>
-                    <td class="priority4">test 2</td>
-                    <td class="priority4">test 2</td>
-                    <td class="text-center">
-                        <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="2">Editar</a>
-                        <a class="btn-sm btn-danger text-white">Borrar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Test1</td>
-                    <td class="priority5">test 3</td>
-                    <td class="priority4">test 3</td>
-                    <td class="priority4">test 3</td>
-                    <td class="text-center">
-                        <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="3">Editar</a>
-                        <a class="btn-sm btn-danger text-white">Borrar</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>*@
         </div>
     </div>
     <br />
@@ -112,7 +69,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="col-form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombreNuevoProducto" />
+                            <input type="text" class="form-control" id="nombreNuevoProducto" required maxlength="15"/>
                         </div>
                     </div>
                 </div>
@@ -121,7 +78,7 @@
                         <div class="form-group">
                             <label class="col-form-label">Formato</label>
                             <div class="input-group">
-                                <select class="form-control" id="selectFormato">
+                                <select class="form-control" id="formatoSelected">
                                     @foreach (var formato in Formatos)
                                     {
                                         <option value="@formato.IdFormato">@formato.NombreFormato</option>
@@ -135,7 +92,7 @@
                         <div class="form-group">
                             <label class="col-form-label">Grupo</label>
                             <div class="input-group">
-                                <select class="form-control">
+                                <select class="form-control" id="grupoSelected">
                                     @foreach (var grupo in Grupos)
                                     {
                                         <option value="@grupo.IdGrupo">@grupo.NombreGrupo</option>
@@ -151,7 +108,7 @@
                             <div class="form-group">
                                 <label class="col-form-label">Presentación</label>
                                 <div class="input-group">
-                                    <select class="form-control">
+                                    <select class="form-control" id="presentacionSelected">
                                         @foreach (var presentacion in Presentaciones)
                                         {
                                             <option value="@presentacion.IdPresentacion">@presentacion.NombrePresentacion</option>
@@ -165,7 +122,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="generarAlert()">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarNuevoProducto()">Guardar</button>
             </div>
         </div>
     </div>
@@ -194,7 +151,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarNuevoGrupo()">Guardar</button>
             </div>
         </div>
     </div>
@@ -269,7 +226,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>
     <script type="text/javascript">
-        $(document).ready( function () {
+        $(document).ready(function() {
             $('#tablaProductos').DataTable({
                 responsive: true,
                 order: [[0, 'desc']],
@@ -288,10 +245,10 @@
             let prueba = "prueba";
             let test2 = "prueba2";
             let data = {
-                test : prueba,
-                test2 : test2
+                test: prueba,
+                test2: test2
             };
-            $.post(url,data).done(function(data) {
+            $.post(url, data).done(function(data) {
                 console.log("llegue");
                 Swal.fire({
                     title: 'Error!',
@@ -314,7 +271,115 @@
         }
 
         function GuardarNuevoGrupo() {
-            let url = "@Url.Action("Prueba", "Auth")";
+            $.ajax({
+                url: "@Url.Action("GuardarGrupo", "Productos")",
+                type: "POST",
+                data: "{ \"NombreGrupo\" : \"" + $('#nuevoGrupoText').val() + "\" }",
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se ha guardado correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    });
+                    $('#nuevoGrupoText').val('');
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Ha ocurrido un error',
+                        icon: 'error',
+                        confirmButtonText: 'Cool'
+                    });
+                }
+            });
         }
+
+        function GuardarNuevoFormato() {
+            $.ajax({
+                url: "@Url.Action("", "Productos")",
+                type: "POST",
+                data: "",
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se ha guardado correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Ha ocurrido un error',
+                        icon: 'error',
+                        confirmButtonText: 'Cool'
+                    });
+                }
+            });
+        }
+
+        function GuardarNuevaPresentacion() {
+            $.ajax({
+                url: "@Url.Action("", "Productos")",
+                type: "POST",
+                data: "",
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se ha guardado correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Ha ocurrido un error',
+                        icon: 'error',
+                        confirmButtonText: 'Cool'
+                    });
+                }
+            });
+        }
+
+        function GuardarNuevoProducto() {
+            let nombreProducto = $("#nombreNuevoProducto").val();
+            let formatoSelected = $("#formatoSelected").val();
+            let grupoSelected = $("#grupoSelected").val();
+            let presentacionSelected = $("#presentacionSelected").val();
+            let dataString = "{ \"nombreProducto\" : \"" + nombreProducto + "\", \"idFormato\" : " + formatoSelected + ", \"idGrupo\" : " + grupoSelected + ", \"idPresentacion\" : " + presentacionSelected +" }";
+            $.ajax({
+                url: "@Url.Action("GuardarProducto", "Productos")",
+                type: "POST",
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success: function () {
+                    $("#nombreNuevoProducto").val('');
+                    $("#modalCrearProducto").modal('hide');
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se ha guardado el producto correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }, function () {
+                        location.reload();
+                    });
+                },
+                error: function (response) {
+                    console.log(response);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Cool'
+                    });
+                }
+            });
+        }
+
     </script>
 }

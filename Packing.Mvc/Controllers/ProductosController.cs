@@ -13,7 +13,7 @@ namespace Packing.Mvc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductosController : ControllerBase
+    public class ProductosController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
@@ -46,24 +46,10 @@ namespace Packing.Mvc.Controllers
             return await _context.SaveChangesAsync() > 0 ? Ok() : BadRequest("Ha ocurrido un error al intentar guardar el producto");
         }
 
-
-        [HttpPost("GuardarGrupo"), Authorize(Roles = "Administrador")]
-        public async Task<ActionResult> GuardarGrupo(NuevoGrupo request)
+        [HttpPost("EliminarProducto"),Authorize(Roles = "Administrador")]
+        public async Task<ActionResult> EliminarProducto(BorrarProducto request)
         {
-            var nuevoNombre = request.NombreGrupo;
-            if (await ExisteGrupoPorNombre(nuevoNombre))
-            {
-                return BadRequest("El grupo ya existe");
-            }
-
-            await _context.Grupos.AddAsync(new GrupoProducto()
-            {
-                NombreGrupo = nuevoNombre,
-                Imagen = null
-            });
-            return await _context.SaveChangesAsync() > 0
-                ? Ok()
-                : BadRequest();
+            return Ok();
         }
 
         private async Task<Formato> ObtenerFormato(int idFormato)
@@ -80,14 +66,7 @@ namespace Packing.Mvc.Controllers
         {
             return await _context.Presentaciones.Where(x => x.IdPresentacion == idPresentacion).FirstAsync();
         }
-
-        private async Task<bool> ExisteGrupoPorNombre(string nombreGrupo)
-        {
-            var gruposExistentes = await _context.Grupos.ToListAsync();
-            if (gruposExistentes.Count <= 0) return false;
-            return await _context.Grupos.Where(grupo => grupo.NombreGrupo.Equals(nombreGrupo)).FirstOrDefaultAsync() is not null;
-        }
-
+        
         private async Task<bool> ExisteProducto(string nombreProducto)
         {
             var productosExistentes = await _context.Productos.ToListAsync();

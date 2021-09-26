@@ -35,6 +35,7 @@ namespace Packing.Mvc.Controllers
             CarroCompra = carroCompra;
         }
 
+        
         [Authorize(Roles = "Administrador,Cliente")]
         public async Task<IActionResult> Index()
         {
@@ -60,7 +61,8 @@ namespace Packing.Mvc.Controllers
         [Authorize]
         public async Task<IActionResult> VistaProductos()
         {
-            var resultProductos = await _context.Productos.Include(prod => prod.Grupo)
+            var resultProductos = await _context.Productos.Where(x => x.Disponibilidad)
+                .Include(prod => prod.Grupo)
                 .Include(x => x.Formato).Include(x => x.Presentacion).ToListAsync();
             var resultGrupos = await _context.Grupos.ToListAsync();
             var resultFormatos = await _context.Formatos.OrderBy(x => x.UnidadPorFormato).ToListAsync();

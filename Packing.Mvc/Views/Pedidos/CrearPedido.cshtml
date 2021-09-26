@@ -1,5 +1,52 @@
-﻿<h2><i class="far fa-edit"></i>&nbsp;Crear Pedido</h2>
+﻿@page  
+<script src="~/jqwidgets/jqxbuttons.js"></script>  
+<script src="~/jqwidgets/jqxscrollbar.js"></script>  
+<script src="~/jqwidgets/jqxlistbox.js"></script>  
+<script src="~/jqwidgets/jqxdropdownlist.js"></script>  
+<script src="~/jqwidgets/jqxdatatable.js"></script>  
+<script src="~/jqwidgets/jqxbuttons.js"></script>  
+@{
+//var Productos = ViewData["Productos"] as List<string>;
+}
+<h2><i class="far fa-edit"></i>&nbsp;Crear Pedido</h2>
 <hr />
 <div class="container-fluid">
+    <p>Busca tus productos y </p>
+    <!--Aqui iterar por cada producto y agregar al carrito -->
+    <div id="productos container py-2">
+        @*@foreach (var producto in Productos)
+        {
+            <div>
 
+            </div>
+        }*@
+    </div>
+    <jqx-button on-click="eventHandler()">Button</jqx-button>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tablaPedidos').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function RefrescarFiltro() {
+
+        }
+
+        function eventHandler(event) {
+            alert('Hola');
+        }
+    </script>
+}

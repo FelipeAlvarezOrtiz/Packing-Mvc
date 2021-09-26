@@ -10,5 +10,10 @@ namespace Packing.Mvc.Controllers
             ViewData["PedidoId"] = guidPedido.ToString();
             return View();
         }
+
+        public IActionResult CrearPedido()
+        {
+            return View();
+        }
     }
 }

@@ -31,8 +31,9 @@
                             <td class="priority4">@Producto.Grupo.NombreGrupo</td>
                             <td class="priority4">@Producto.Presentacion.NombrePresentacion</td>
                             <td class="text-center">
+                                <a class="btn-sm btn-info" asp-controller="VistaProductos" asp-action="VerProducto" asp-route-idProducto="@Producto.IdProducto">Ver</a>
                                 <a class="btn-sm btn-info" asp-controller="VistaProductos" asp-action="EditarProducto" asp-route-idProducto="@Producto.IdProducto">Editar</a>
-                                <a class="btn-sm btn-danger text-white">Borrar</a>
+                                <a class="btn-sm btn-danger text-white" onclick="EliminarProducto(@Producto.IdProducto)">Borrar</a>
                             </td>
                         </tr>
                     }
@@ -131,28 +132,35 @@
 <div class="modal fade" id="modalNuevoGrupo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Grupo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label" for="nuevoGrupoText" style="font-size: small;">Nuevo grupo (Ej. Zanahorias,Lechugas,etc.)</label>
-                                <input type="text" class="form-control" id="nuevoGrupoText" style="font-size: small;" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Nuevo Grupo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="nuevoGrupoText" style="font-size: small;">Nuevo grupo (Ej. Zanahorias,Lechugas,etc.)</label>
+                                    <input type="text" class="form-control" id="nuevoGrupoText" style="font-size: small;" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="grupoImage" style="font-size: small;">Imagen del grupo de productos</label>
+                                    <input id="grupoImage" type="file" accept=".jpg,.jpeg,.png" class="form-control-file"/>
+                                </div>
                             </div>
                         </div>
+
                     </div>
-                </div>   
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="GuardarNuevoGrupo()">Guardar</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="GuardarNuevoGrupo()">Guardar</button>
+                </div>
         </div>
     </div>
 </div>
@@ -188,7 +196,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarNuevoFormato()">Guardar</button>
             </div>
         </div>
     </div>
@@ -240,142 +248,269 @@
             });
         });
 
-        function generarAlert() {
-            let url = "@Url.Action("Prueba", "Auth")";
-            let prueba = "prueba";
-            let test2 = "prueba2";
-            let data = {
-                test: prueba,
-                test2: test2
-            };
-            $.post(url, data).done(function(data) {
-                console.log("llegue");
+        function GuardarNuevoGrupo() {
+            let nuevoGrupo = $('#nuevoGrupoText').val();
+            if (nuevoGrupo !== '') {
+                $.ajax({
+                    url: "@Url.Action("GuardarGrupo", "Grupos")",
+                    type: "POST",
+                    data: "{ \"NombreGrupo\" : \"" + nuevoGrupo + "\" }",
+                    contentType: "application/json; charset=utf-8",
+                    success: function() {
+                        Swal.fire({
+                            title: '¡Exito!',
+                            text: 'Se ha guardado correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then(function() {
+                            RefrescarGrupos();
+                            $('#nuevoGrupoText').val('');
+                            $("#modalNuevoGrupo").modal('hide');
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Ha ocurrido un error',
+                            icon: 'error',
+                            confirmButtonText: 'Cool'
+                        });
+                    }
+                });
+            } else {
                 Swal.fire({
                     title: 'Error!',
-                    text: 'Do you want to continue',
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                })
-                $('#modalCrearProducto').modal('hide');
-            }).fail(function(err) {
-                console.error(err.responseText);
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Do you want to continue',
+                    text: 'No puede ingresar un grupo sin nombre',
                     icon: 'error',
                     confirmButtonText: 'Cool'
-                })
-            }).always(function() {
-                console.log("Siempre ejecutado");
-            });
-        }
-
-        function GuardarNuevoGrupo() {
-            $.ajax({
-                url: "@Url.Action("GuardarGrupo", "Productos")",
-                type: "POST",
-                data: "{ \"NombreGrupo\" : \"" + $('#nuevoGrupoText').val() + "\" }",
-                contentType: "application/json; charset=utf-8",
-                success: function() {
-                    Swal.fire({
-                        title: '¡Exito!',
-                        text: 'Se ha guardado correctamente.',
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
-                    });
-                    $('#nuevoGrupoText').val('');
-                },
-                error: function() {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Ha ocurrido un error',
-                        icon: 'error',
-                        confirmButtonText: 'Cool'
-                    });
-                }
-            });
+                });
+            }
         }
 
         function GuardarNuevoFormato() {
-            $.ajax({
-                url: "@Url.Action("", "Productos")",
-                type: "POST",
-                data: "",
-                contentType: "application/json; charset=utf-8",
-                success: function() {
-                    Swal.fire({
-                        title: '¡Exito!',
-                        text: 'Se ha guardado correctamente.',
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
-                    });
-                },
-                error: function() {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Ha ocurrido un error',
-                        icon: 'error',
-                        confirmButtonText: 'Cool'
-                    });
-                }
-            });
+            let nombreFormato = $("#nuevoNombreFormato").val();
+            let unidadPorFormato = $("#nuevaUnidadPorFormato").val();
+            if (nombreFormato !== '' || unidadPorFormato > 0) {
+                $.ajax({
+                    url: "@Url.Action("GuardarFormato", "Formatos")",
+                    type: "POST",
+                    data: "{ \"nombreFormato\" : \"" + nombreFormato + "\" , \"unidadesPorFormato\" : \"" + unidadPorFormato + "\" }",
+                    contentType: "application/json; charset=utf-8",
+                    success: function() {
+                        $("#nuevoNombreFormato").val('');
+                        $("#nuevaUnidadPorFormato").val('');
+                        Swal.fire({
+                            title: '¡Exito!',
+                            text: 'Se ha guardado correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then(function() {
+                            $("#modalNuevoFormato").modal('hide');
+                            RefrescarFormatos();
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Cool'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Verifique los campos.',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                });
+            }
         }
 
         function GuardarNuevaPresentacion() {
-            $.ajax({
-                url: "@Url.Action("", "Productos")",
-                type: "POST",
-                data: "",
-                contentType: "application/json; charset=utf-8",
-                success: function() {
-                    Swal.fire({
-                        title: '¡Exito!',
-                        text: 'Se ha guardado correctamente.',
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
-                    });
-                },
-                error: function() {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Ha ocurrido un error',
-                        icon: 'error',
-                        confirmButtonText: 'Cool'
-                    });
-                }
-            });
+            let nombrePresentacion = $("#nuevoNombrePresentacion").val();
+            if (nombrePresentacion !== '') {
+                $.ajax({
+                    url: "@Url.Action("InsertarPresentacion", "Presentaciones")",
+                    type: "POST",
+                    data: "{\"NombrePresentacion\": \" " + +" \"}",
+                    contentType: "application/json; charset=utf-8",
+                    success: function() {
+                        Swal.fire({
+                            title: '¡Exito!',
+                            text: 'Se ha guardado correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then(function() {
+                            $("#nuevoNombrePresentacion").val('');
+                            $("#modalNuevaPresentacion").modal('hide');
+                            RefrescarPresentaciones();
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Cool'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'No puede ingresar una presentación sin nombre.',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                });
+            }
         }
 
         function GuardarNuevoProducto() {
             let nombreProducto = $("#nombreNuevoProducto").val();
-            let formatoSelected = $("#formatoSelected").val();
-            let grupoSelected = $("#grupoSelected").val();
-            let presentacionSelected = $("#presentacionSelected").val();
-            let dataString = "{ \"nombreProducto\" : \"" + nombreProducto + "\", \"idFormato\" : " + formatoSelected + ", \"idGrupo\" : " + grupoSelected + ", \"idPresentacion\" : " + presentacionSelected +" }";
+            if (nombreProducto !== '') {
+                let formatoSelected = $("#formatoSelected").val();
+                let grupoSelected = $("#grupoSelected").val();
+                let presentacionSelected = $("#presentacionSelected").val();
+                let dataString = "{ \"nombreProducto\" : \"" + nombreProducto + "\", \"idFormato\" : " + formatoSelected + ", \"idGrupo\" : " + grupoSelected + ", \"idPresentacion\" : " + presentacionSelected + " }";
+                $.ajax({
+                    url: "@Url.Action("GuardarProducto", "Productos")",
+                    type: "POST",
+                    data: dataString,
+                    contentType: "application/json; charset=utf-8",
+                    success: function() {
+                        $("#nombreNuevoProducto").val('');
+                        $("#modalCrearProducto").modal('hide');
+                        Swal.fire({
+                            title: '¡Exito!',
+                            text: 'Se ha guardado el producto correctamente.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then(function() {
+                            location.reload();
+                        });
+                    },
+                    error: function(response) {
+                        console.log(response);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Cool'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El nombre del producto no puede ser vacio.',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                });
+            }
+        }
+
+        function RefrescarFormatos() {
             $.ajax({
-                url: "@Url.Action("GuardarProducto", "Productos")",
+                url: "@Url.Action("ObtenerFormatos", "Formatos")",
                 type: "POST",
-                data: dataString,
+                data: "",
                 contentType: "application/json; charset=utf-8",
-                success: function () {
-                    $("#nombreNuevoProducto").val('');
-                    $("#modalCrearProducto").modal('hide');
-                    Swal.fire({
-                        title: '¡Exito!',
-                        text: 'Se ha guardado el producto correctamente.',
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
-                    }, function () {
-                        location.reload();
-                    });
+                success: function(data) {
+                    let results = $.parseJSON(JSON.stringify(data));
+                    document.getElementById('formatoSelected').innerHTML = "";
+                    console.table(results);
+                    $.each(results,
+                        function(i, d) {
+                            $('#formatoSelected').append('<option value = "' + d.idFormato + '">' + d.nombreFormato + '</option>');
+                        });
                 },
-                error: function (response) {
-                    console.log(response);
+                error: function(response) {
                     Swal.fire({
                         title: 'Error!',
                         text: response.responseText,
                         icon: 'error',
-                        confirmButtonText: 'Cool'
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function RefrescarPresentaciones() {
+            $.ajax({
+                url: "@Url.Action("ObtenerPresentaciones", "Presentaciones")",
+                type: "POST",
+                data: "",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    let results = $.parseJSON(JSON.stringify(data));
+                    document.getElementById('presentacionSelected').innerHTML = "";
+                    console.table(results);
+                    $.each(results,
+                        function(i, d) {
+                            $('#presentacionSelected').append('<option value = "' + d.idPresentacion + '">' + d.nombrePresentacion + '</option>');
+                        });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function RefrescarGrupos() {
+            $.ajax({
+                url: "@Url.Action("ObtenerGrupos", "Grupos")",
+                type: "POST",
+                data: "",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    let results = $.parseJSON(JSON.stringify(data));
+                    document.getElementById('grupoSelected').innerHTML = "";
+                    console.table(results);
+                    $.each(results,
+                        function(i, d) {
+                            $('#grupoSelected').append('<option value = "' + d.idGrupo + '">' + d.nombreGrupo + '</option>');
+                        });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function EliminarProducto(idProducto) {
+            $.ajax({
+                url: "@Url.Action("ObtenerGrupos", "Grupos")",
+                type: "POST",
+                data: "{ \"IdProducto\" : "+idProducto+" }",
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se han actualizado correctamente los datos.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then(function() {
+                        location.reload();
+                    });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
                     });
                 }
             });

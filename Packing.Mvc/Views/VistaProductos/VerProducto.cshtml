@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@{
+    var Producto = ViewData["Producto"] as Producto;
+}
+<br/>
+<a class="btn btn-info" asp-controller="Home" asp-action="VistaProductos">Volver atrás</a>
+<br/>
+<hr/>
+<div class="container-fluid d-flex justify-content-center">
+    <div class="card text-center" style="width: 75%; height: 50%;">
+        <h5 class="card-header">@Producto.NombreParaBusqueda</h5>
+        <img class="card-img-top" src="/images/not-found.jpg" alt="Imagen">
+        <div class="card-body">
+            <p class="card-text">@Producto.NombreProducto</p>
+            <input type="number" />
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary">Agregar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tablaProductos').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+    </script>
+}

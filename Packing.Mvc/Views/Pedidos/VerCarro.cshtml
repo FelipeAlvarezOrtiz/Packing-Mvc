@@ -1,0 +1,26 @@
+﻿@using Packing.Mvc.Models.Pedidos
+@{
+    var ProductosEnCarro = new List<DetallePedidoDto>();
+    try
+    {
+        ProductosEnCarro = ViewData["ProductosEnCarro"] as List<DetallePedidoDto>;
+    }
+    catch (Exception)
+    {
+
+    }
+}
+<div class="container-fluid">
+    @if (ProductosEnCarro.Count > 0)
+    {
+        @foreach (var producto in ProductosEnCarro)
+        {
+            <p>@producto.productoDto.NombreParaBusqueda con @producto.cantidad</p><br/>
+        }
+    }
+    else
+    {
+        <p>No hay productos en el carro.</p>
+        <a asp-controller="Home" asp-action="VistaProductos">Hacer un pedido</a>
+    }
+</div>

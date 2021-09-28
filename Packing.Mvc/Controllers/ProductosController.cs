@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -50,6 +51,25 @@ namespace Packing.Mvc.Controllers
         public async Task<ActionResult> EliminarProducto(BorrarProducto request)
         {
             return Ok();
+        }
+
+        [HttpPost("ActualizarProducto"),Authorize(Roles = "Administrador")]
+        public async Task<ActionResult> ActualizarProducto(ActualizarProducto request)
+        {
+            var productoEntidad = await _context.Productos.Where(x => x.IdProducto == request.idProducto).FirstOrDefaultAsync();
+            if (productoEntidad is null) return BadRequest("El producto no existe");
+            var incFormato = await ObtenerFormato(request.idFormato);
+            var incGrupo = await ObtenerGrupo(request.idGrupo);
+            var incPresentacion = await ObtenerPresentacion(request.idPresentacion);
+            var searchName = request.nombreProducto + " " + incFormato.NombreFormato + " " +
+                             incPresentacion.NombrePresentacion + " " + incGrupo.NombreGrupo;
+            productoEntidad.Formato = incFormato;
+            productoEntidad.Grupo = incGrupo;
+            productoEntidad.Presentacion = incPresentacion;
+            productoEntidad.NombreParaBusqueda = searchName;
+            productoEntidad.NombreProducto = request.nombreProducto;
+            productoEntidad.Disponibilidad = true;
+            return await _context.SaveChangesAsync() > 0 ? Ok("Datos actualizados") : BadRequest("Ha ocurrido un error interno, pruebe más tarde.");
         }
 
         private async Task<Formato> ObtenerFormato(int idFormato)

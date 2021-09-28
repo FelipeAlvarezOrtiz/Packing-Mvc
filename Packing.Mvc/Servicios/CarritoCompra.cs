@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Packing.Mvc.Models;
@@ -7,7 +8,7 @@ using Packing.Mvc.Servicios.Interfaces;
 
 namespace Packing.Mvc.Servicios
 {
-    public class CarritoCompra : ICarroCompra
+    public class CarritoCompra : ICarroCompra, IDisposable
     {
         private readonly List<DetallePedidoDto> Productos = new();
         private readonly IConfiguration _config;
@@ -47,6 +48,16 @@ namespace Packing.Mvc.Servicios
         public bool ExisteEnCarro(Producto producto)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void LimpiarCarro()
+        {
+            Productos.Clear();
+        }
+
+        public void Dispose()
+        {
+            Productos.Clear();
         }
     }
 

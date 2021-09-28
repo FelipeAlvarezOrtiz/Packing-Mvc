@@ -32,7 +32,7 @@
                             <td class="priority4">@Producto.Presentacion.NombrePresentacion</td>
                             <td class="text-center">
                                 <a class="btn-sm btn-info" asp-controller="VistaProductos" asp-action="VerProducto" asp-route-idProducto="@Producto.IdProducto">Ver</a>
-                                <a class="btn-sm btn-info" asp-controller="VistaProductos" asp-action="EditarProducto" asp-route-idProducto="@Producto.IdProducto">Editar</a>
+                                @*<a class="btn-sm btn-info" asp-controller="VistaProductos" asp-action="EditarProducto" asp-route-idProducto="@Producto.IdProducto">Editar</a>*@
                                 <a class="btn-sm btn-danger text-white" onclick="EliminarProducto(@Producto.IdProducto)">Borrar</a>
                             </td>
                         </tr>

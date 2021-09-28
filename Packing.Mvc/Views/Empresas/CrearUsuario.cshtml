@@ -119,10 +119,10 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
     <script type="text/javascript">
         $(document).ready(function() {
-            
+
         });
 
         function borrarUsuario() {
@@ -138,7 +138,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     let url = "@Url.Action("EnviarCorreo", "PedidosApi")";
-                    $.post(url).done(function (data) {
+                    $.post(url).done(function(data) {
                         Swal.fire(
                             '¡Eliminado!',
                             'El usuario ha sido desactivado correctamente.',
@@ -157,5 +157,34 @@
                 }
             });
         }
+
+        function ValidarEmpresa() {
+            let rutEmpresa = $("#rutEmpresa").val();
+            const dataString = "{ \"RutEmpresa\" : \""+rutEmpresa+"\" }";
+            $.ajax({
+                url: "@Url.Action("ObtieneDatosDeEmpresa", "Empresas")",
+                type: "POST",
+                data: dataString,
+                async: true,
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: response.responseText,
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
     </script>
 }

@@ -49,5 +49,12 @@ namespace Packing.Mvc.Controllers
             payload.AddRange(result.Select(identityRole => identityRole.Name));
             return payload;
         }
+
+        [HttpPost("ObtieneDatosDeEmpresa"),Authorize]
+        public async Task<ActionResult> ObtieneDatosDeEmpresa(string rutEmpresa)
+        {
+            var result = await _context.Empresas.Where(x => x.RutEmpresa.Equals(rutEmpresa)).FirstOrDefaultAsync();
+            return result is null ? Ok("No existe datos") : Ok(result);
+        }
     }
 }

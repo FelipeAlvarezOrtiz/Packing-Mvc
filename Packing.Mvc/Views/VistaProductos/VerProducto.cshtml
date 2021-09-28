@@ -1,31 +1,167 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Packing.Mvc.Models.Empresas
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 @inject RoleManager<IdentityRole> RoleManager
 @{
     var Producto = ViewData["Producto"] as Producto;
+    var Grupos = ViewData["Grupos"] as List<GrupoProducto>;
+    var Formatos = ViewData["Formatos"] as List<Formato>;
+    var Presentaciones = ViewData["Presentaciones"] as List<Presentacion>;
 }
-<br/>
-<a class="btn btn-info" asp-controller="Home" asp-action="VistaProductos">Volver atrás</a>
-<br/>
-<hr/>
+<br />
+<style>
+    @@media (min-width:700px) {
+        producto {
+            width: 50%;
+            height: 50%;
+        }
+    }
+
+    @@media(max-width: 699px) {
+        producto {
+            width: 95%;
+            height: 95%;
+        }
+    }
+</style>
+@if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Cliente"))
+{
+<a class="btn btn-info" asp-controller="Home" asp-action="VistaProductos"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+}
+else
+{
+    <a class="btn btn-info" asp-controller="Home" asp-action="VistaProductos"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+}
+<br />
+<hr />
 <div class="container-fluid d-flex justify-content-center">
-    <div class="card text-center" style="width: 75%; height: 50%;">
-        <h5 class="card-header">@Producto.NombreParaBusqueda</h5>
-        <img class="card-img-top" src="/images/not-found.jpg" alt="Imagen">
+    <div class="card text-center producto">
+        <h5 class="card-header"><i class="fas fa-carrot"></i>&nbsp; @Producto.NombreParaBusqueda</h5>
+        <img class="card-img-top p-3" src="/images/productos/repollo crespo.png" alt="Imagen">
+        <hr/>
         <div class="card-body">
-            <p class="card-text">@Producto.NombreProducto</p>
-            <input type="number" />
+            <p class="card-text justify-content-center"><label>Nombre y formato del producto: @Producto.NombreProducto @Producto.Formato.NombreFormato</label></p>
+            <p class="card-text justify-content-center"><label>Cantidad por formato: @Producto.Formato.UnidadPorFormato unidades</label></p>
+            <p class="card-text justify-content-center"><label>Presentación del producto: @Producto.Presentacion.NombrePresentacion</label></p>
+            @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Cliente"))
+            {
+                <hr />
+                <p class="card-text justify-content-center">
+                    <label for="cantidadProducto" class="col-form-label">Cantidad a agregar</label>
+                    <input id="cantidadProducto" type="number" min="0" class="form-control" required />
+                </p>
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary" onclick="AgregarAlPedido(@Producto.IdProducto)"><i class="fas fa-plus-square"></i>&nbsp; Agregar</button>
+                </div>
+            }
+            else if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Administrador"))
+            {
+                <div class="card-footer">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalEditarProducto"><i class="fas fa-sync"></i>&nbsp; Actualizar</button>
+                </div>
+            }
         </div>
-        <div class="card-footer">
-            <button type="button" class="btn btn-primary">Agregar</button>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEditarProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Nuevo producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreNuevoProducto" value="@Producto.NombreProducto" required maxlength="15" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-form-label">Formato</label>
+                            <div class="input-group">
+                                <select class="form-control" id="formatoSelected">
+                                    @foreach (var formato in Formatos)
+                                    {
+                                        @if (formato.IdFormato == Producto.Formato.IdFormato)
+                                        {
+                                            <option selected="selected" value="@formato.IdFormato">@formato.NombreFormato</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@formato.IdFormato">@formato.NombreFormato</option>
+                                        }
+                                    }
+                                </select>&nbsp;
+                                <button class="btn btn-outline-info" id="botonNuevoFormato" onclick="$('#modalNuevoFormato').modal('show')"><i class="fas fa-plus-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-form-label">Grupo</label>
+                            <div class="input-group">
+                                <select class="form-control" id="grupoSelected">
+                                    @foreach (var grupo in Grupos)
+                                    {
+                                        @if (grupo.IdGrupo == Producto.Grupo.IdGrupo)
+                                        {
+                                            <option selected="selected" value="@grupo.IdGrupo">@grupo.NombreGrupo</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@grupo.IdGrupo">@grupo.NombreGrupo</option>
+                                        }
+                                    }
+                                </select>&nbsp;
+                                <button class="btn btn-outline-info" id="botonNuevoGrupo" onclick="$('#modalNuevoGrupo').modal('show')"><i class="fas fa-plus-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-form-label">Presentación</label>
+                            <div class="input-group">
+                                <select class="form-control" id="presentacionSelected">
+                                    @foreach (var presentacion in Presentaciones)
+                                    {
+                                        if (presentacion.IdPresentacion == Producto.Presentacion.IdPresentacion)
+                                        {
+                                            <option selected="selected" value="@presentacion.IdPresentacion">@presentacion.NombrePresentacion</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@presentacion.IdPresentacion">@presentacion.NombrePresentacion</option>
+                                        }
+                                    }
+                                </select>&nbsp;
+                                <button class="btn btn-outline-info" id="botonNuevaPresentacion" onclick="$('#modalNuevaPresentacion').modal('show')"><i class="fas fa-plus-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="ActualizarProducto(@Producto.IdProducto)">Actualizar</button>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
     <script type="text/javascript">
         $(document).ready(function() {
             $('#tablaProductos').DataTable({
@@ -40,6 +176,154 @@
                 }
             });
         });
+
+        function ActualizarProducto(idProducto) {
+            const nombreProducto = $("#nombreNuevoProducto").val();
+            if (nombreProducto !== '') {
+                const formatoSelected = $("#formatoSelected").val();
+                const grupoSelected = $("#grupoSelected").val();
+                const presentacionSelected = $("#presentacionSelected").val();
+                const dataString = "{ \"idProducto\": " + idProducto + " ,\"nombreProducto\" : \"" + nombreProducto + "\", \"idFormato\" : " + formatoSelected + ", \"idGrupo\" : " + grupoSelected + ", \"idPresentacion\" : " + presentacionSelected + " }";
+                $.ajax({
+                    url: "@Url.Action("ActualizarProducto", "Productos")",
+                    type: "POST",
+                    data: dataString,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        $("#modalEditarProducto").modal('hide');
+                        Swal.fire({
+                            title: '¡Exito!',
+                            text: response.responseText,
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then(function() {
+                            location.reload();
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El nombre del producto no puede ser vacio.',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                });
+            }
+        }
+
+        function AgregarAlPedido(idProducto) {
+            let cantidadProducto = $("#cantidadProducto").val();
+            let dataString = "{ \"idProducto\" : " + idProducto + " , \"cantidadProducto\" : " + cantidadProducto + " }";
+            console.log(dataString);
+            $.ajax({
+                url: "@Url.Action("InsertarProductoAlPedido", "Pedidos")",
+                type: "POST",
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: response.responseText,
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function RefrescarFormatos() {
+            $.ajax({
+                url: "@Url.Action("ObtenerFormatos", "Formatos")",
+                type: "POST",
+                data: "",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    let results = $.parseJSON(JSON.stringify(data));
+                    document.getElementById('formatoSelected').innerHTML = "";
+                    console.table(results);
+                    $.each(results,
+                        function(i, d) {
+                            $('#formatoSelected').append('<option value = "' + d.idFormato + '">' + d.nombreFormato + '</option>');
+                        });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function RefrescarPresentaciones() {
+            $.ajax({
+                url: "@Url.Action("ObtenerPresentaciones", "Presentaciones")",
+                type: "POST",
+                data: "",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    let results = $.parseJSON(JSON.stringify(data));
+                    document.getElementById('presentacionSelected').innerHTML = "";
+                    console.table(results);
+                    $.each(results,
+                        function(i, d) {
+                            $('#presentacionSelected').append('<option value = "' + d.idPresentacion + '">' + d.nombrePresentacion + '</option>');
+                        });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function RefrescarGrupos() {
+            $.ajax({
+                url: "@Url.Action("ObtenerGrupos", "Grupos")",
+                type: "POST",
+                data: "",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    let results = $.parseJSON(JSON.stringify(data));
+                    document.getElementById('grupoSelected').innerHTML = "";
+                    console.table(results);
+                    $.each(results,
+                        function(i, d) {
+                            $('#grupoSelected').append('<option value = "' + d.idGrupo + '">' + d.nombreGrupo + '</option>');
+                        });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
 
     </script>
 }

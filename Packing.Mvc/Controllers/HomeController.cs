@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Packing.Mvc.Models;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Packing.Mvc.Data;
+using Packing.Mvc.Models.Pedidos;
 using Packing.Mvc.Servicios.Interfaces;
 
 namespace Packing.Mvc.Controllers
@@ -39,14 +39,33 @@ namespace Packing.Mvc.Controllers
         [Authorize(Roles = "Administrador,Cliente")]
         public async Task<IActionResult> Index()
         {
+            ViewData["Notificaciones"] = await _context.Notificaciones.Where(x => x.Notificado == false).ToListAsync();
+            var PedidosPendientes =
+                await _context.Notificaciones.Where(x => x.Criticidad == 1 && x.Notificado == false).ToListAsync();
+            var SolicitudesPendientes = await _context.Notificaciones.Where(x => x.Criticidad == 2 && x.Notificado == false).ToListAsync();
+            ViewData["HayPedidosPendientes"] = PedidosPendientes.Count > 0;
+            ViewData["HaySolicitudesPendientes"] = SolicitudesPendientes.Count > 0;
+            var listaPedidos = new List<Pedido>();
+
+            if (await _userManager.IsInRoleAsync(await _userManager.GetUserAsync(User), "Cliente"))
+            {
+                var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+                var usuarioData = await _context.Usuarios.Where(x => x.Email.Equals(user.Email)).Include(x => x.Empresa).FirstOrDefaultAsync();
+                if (usuarioData is null) return BadRequest("Error de usuario.");
+                listaPedidos = await _context.Pedidos
+                    .Where(x => x.EmpresaMandante.RutEmpresa.Equals(usuarioData.Empresa.RutEmpresa)).Include(x => x.EmpresaMandante)
+                    .Include(x => x.Estado).Include(x => x.ProductosEnPedido).ToListAsync();
+            }
+            ViewData["Pedidos"] = listaPedidos;
+
             return View();
         }
 
         [Authorize]
-        public IActionResult Pedidos()
+        public async Task<IActionResult> Pedidos()
         {
-            var Pedidos = new List<string>();
-            ViewData["Pedidos"] = Pedidos;
+            ViewData["Pedidos"] = await _context.Pedidos.Include(x => x.Estado).Where(x => x.Estado.IdEstadoPedido > 0)
+                .Include(x => x.EmpresaMandante).Include(x => x.Estado).OrderByDescending(x => x.FechaPedido).ToListAsync();
             return View();
         }
 

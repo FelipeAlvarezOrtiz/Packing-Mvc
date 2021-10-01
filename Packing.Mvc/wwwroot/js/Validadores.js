@@ -92,7 +92,7 @@ $(".email").blur(function () {
 
 
 $("#rutEmpresa").on("keyup", function () {
-    document.getElementById('username').addEventListener('input', function (event) {
+    document.getElementById('rutEmpresa').addEventListener('input', function (event) {
         let value = this.value.replace(/\./g, '').replace('-', '');
 
         if (value.match(/^(\d{2})(\d{3}){2}(\w{1})$/)) {

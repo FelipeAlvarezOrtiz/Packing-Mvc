@@ -22,5 +22,7 @@ namespace Packing.Mvc.Data
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<EstadoPedido> EstadosPedidos { get; set; }
         public DbSet<DetallePedido> DetallePedidos { get; set; }
+        public DbSet<Notificacion> Notificaciones { get; set; }
+
     }
 }

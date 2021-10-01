@@ -27,7 +27,7 @@
 </style>
 @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Cliente"))
 {
-<a class="btn btn-info" asp-controller="Home" asp-action="VistaProductos"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+    <a class="btn btn-info" asp-controller="Pedidos" asp-action="Grupos" asp-route-idGrupo="@Producto.Grupo.IdGrupo"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
 }
 else
 {
@@ -52,7 +52,7 @@ else
                     <input id="cantidadProducto" type="number" min="0" class="form-control" required />
                 </p>
                 <div class="card-footer">
-                    <button type="button" class="btn btn-primary" onclick="AgregarAlPedido(@Producto.IdProducto)"><i class="fas fa-plus-square"></i>&nbsp; Agregar</button>
+                    <button type="button" class="btn btn-success" onclick="AgregarAlPedido(@Producto.IdProducto)"><i class="fas fa-plus-square"></i>&nbsp; Agregar</button>
                 </div>
             }
             else if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Administrador"))
@@ -222,7 +222,31 @@ else
         function AgregarAlPedido(idProducto) {
             let cantidadProducto = $("#cantidadProducto").val();
             let dataString = "{ \"idProducto\" : " + idProducto + " , \"cantidadProducto\" : " + cantidadProducto + " }";
-            console.log(dataString);
+            $.ajax({
+                url: "@Url.Action("ExisteProductoEnCarro","Pedidos")",
+                type: "POST",
+                async: true,
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success : function() {
+                    AgregarFinal(dataString); 
+                },error : function(response) {
+                    Swal.fire({
+                        title: 'Información',
+                        text: response.responseText,
+                        icon: 'info',
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            AgregarFinal(dataString);
+                        }
+                    });;
+                }
+            });
+
+        }
+
+        function AgregarFinal(dataString) {
             $.ajax({
                 url: "@Url.Action("InsertarProductoAlPedido", "Pedidos")",
                 type: "POST",

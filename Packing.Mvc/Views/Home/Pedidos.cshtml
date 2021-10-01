@@ -1,6 +1,7 @@
-﻿@{
+﻿@using Packing.Mvc.Models.Pedidos
+@{
     ViewData["Title"] = "Listado de pedidos";
-    var Pedidos = ViewData["Pedidos"] as List<string>;
+    var Pedidos = ViewData["Pedidos"] as List<Pedido>;
 }
 <h3>&nbsp;Pedidos en sistema</h3>
 <hr />
@@ -42,7 +43,7 @@
         <div class="col-12">
             @if (Pedidos is not null)
             {
-                @if (Pedidos.Any())
+                @if (!Pedidos.Any())
                 {
                     <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No existen pedidos ingresados.</h4></div>
                 }
@@ -50,30 +51,25 @@
                 {
                     <table id="tablaPedidos" class="table table-responsive-lg table-striped table-bordered">
                         <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Empresa</th>
-                                <th class="priority5" scope="col">Fecha Ingreso</th>
-                                <th class="priority4" scope="col">Estado</th>
-                                <th class="priority3" scope="col">Acciones</th>
-                            </tr>
+                        <tr>
+                            <th scope="col">Empresa</th>
+                            <th class="priority5" scope="col">Fecha Ingreso</th>
+                            <th class="priority4" scope="col">Estado</th>
+                            <th class="priority3" scope="col">Acciones</th>
+                        </tr>
                         </thead>
                         <tbody>
+                        @foreach (var pedido in Pedidos)
+                        {
                             <tr>
-                                <td>Punto Azul S.A.</td>
-                                <td class="priority5">17/08/2021</td>
-                                <td class="priority4">Ingresada</td>
+                                <td>@pedido.EmpresaMandante.NombreEmpresa</td>
+                                <td class="priority5">@pedido.FechaPedido.ToShortDateString()</td>
+                                <td class="priority4">@pedido.Estado.NombreEstado</td>
                                 <td class="text-center">
-                                    <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@(Guid.NewGuid())">Detalles</a>
+                                    <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@pedido.GuidPedido">Detalles</a>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Punto Azul S.A.</td>
-                                <td class="priority5">18/08/2021</td>
-                                <td class="priority4">Ingresada</td>
-                                <td class="text-center">
-                                    <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@(Guid.NewGuid())">Detalles</a>
-                                </td>
-                            </tr>
+                        }
                         </tbody>
                     </table>
                 }

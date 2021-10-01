@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Packing.Mvc.Models.Empresas;
@@ -17,6 +18,7 @@ namespace Packing.Mvc.Models.Pedidos
         public DateTime FechaUltimaActualizacion { get; set; }
         [MaxLength(250, ErrorMessage = "Limite de carácteres sobrepasados.")]
         public string Observacion { get; set; }
+        public List<DetallePedido> ProductosEnPedido { get; set; }
     }
 
     public class EstadoPedido
@@ -25,4 +27,6 @@ namespace Packing.Mvc.Models.Pedidos
         public int IdEstadoPedido { get; set; }
         public string NombreEstado { get; set; }
     }
+    
+    public record ActualizarPedido(Guid idPedido, int idEstado);
 }

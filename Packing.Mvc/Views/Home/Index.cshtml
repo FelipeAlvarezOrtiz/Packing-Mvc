@@ -1,40 +1,54 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Packing.Mvc.Models.Pedidos
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Index";
+    var Notificaciones = ViewData["Notificaciones"] as List<Notificacion>;
+    var NotificacionPedido = (bool)ViewData["HayPedidosPendientes"];
+    var NotificacionCambioDatos = (bool)ViewData["HaySolicitudesPendientes"];
+    var PedidosEnSistema = ViewData["Pedidos"] as List<Pedido>;
 }
 <div class="container-fluid">
     @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Administrador"))
     {
-        <div class="text-center">
-            <h4 class="display-4">Bienvenido, tiene notificaciones sin revisar</h4>
-        </div>
-        <hr />
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info">
-                    <h5>
-                        <i class="fas fa-exclamation-circle"></i>&nbsp;Tiene nuevos pedidos sin procesar &nbsp;
-                        <a class="btn btn-info" asp-area="" asp-controller="Home" asp-action="Pedidos">
-                            <i class="far fa-list-alt"></i>&nbsp;Ir a Pedidos
-                        </a>
-                    </h5>
+        if (Notificaciones.Count > 0)
+        {
+            <div class="text-center">
+                <h4 class="display-4">Bienvenido, tiene notificaciones sin revisar</h4>
+            </div>
+            <hr />
+        }
+        if (NotificacionPedido)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <h5>
+                            <i class="fas fa-exclamation-circle"></i>&nbsp;Tiene nuevos pedidos sin procesar &nbsp;
+                            <a class="btn btn-info" asp-area="" asp-controller="Home" asp-action="Pedidos">
+                                <i class="far fa-list-alt"></i>&nbsp;Ir a Pedidos
+                            </a>
+                        </h5>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-danger">
-                    <h5>
-                        <i class="fas fa-exclamation-triangle"></i>&nbsp;Algunos usuarios han solicitado cambio de datos &nbsp;
-                        <a class="btn btn-info" asp-area="" asp-controller="Home" asp-action="ConfiguracionUsuario">
-                            <i class="far fa-list-alt"></i>&nbsp;Ir a Usuarios
-                        </a>
-                    </h5>
+        }
+        if (NotificacionCambioDatos)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        <h5>
+                            <i class="fas fa-exclamation-triangle"></i>&nbsp;Algunos usuarios han solicitado cambio de datos &nbsp;
+                            <a class="btn btn-info" asp-area="" asp-controller="Home" asp-action="ConfiguracionUsuario">
+                                <i class="far fa-list-alt"></i>&nbsp;Ir a Usuarios
+                            </a>
+                        </h5>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
         <hr />
         <h4><i class="fas fa-info"></i>&nbsp;Accesos directos</h4>
         <hr />
@@ -97,48 +111,65 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 m-1"></div>
+            <div class="col-md-4 p-1">
+                <div class="card bg-light" style="width: 18rem;">
+                    <br />
+                    <div class="text-center">
+                        <h2>
+                            <i class="card-img-top far fa-bell fa-3x"></i>
+                        </h2>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Notificaciones</h5>
+                        <a asp-controller="Notificaciones" asp-action="Index" class="btn btn-primary">Ir a mi centro de notificaciones</a>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-4 m-1"></div>
         </div>
     }
     else
     {
-        <h3><i class="fas fa-shopping-cart"></i>&nbsp;Tus pedidos</h3>
-        <hr />
-        <div class="row">
-            <div class="col-12">
-                <table id="tablaPedidos" class="table table-responsive-lg table-striped table-bordered">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">Empresa</th>
-                        <th class="priority5" scope="col">Fecha Ingreso</th>
-                        <th class="priority4" scope="col">Estado</th>
-                        <th class="priority3" scope="col">Acciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>Punto Azul S.A.</td>
-                        <td class="priority5">17/08/2021</td>
-                        <td class="priority4">Ingresada</td>
-                        <td class="text-center">
-                            <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@(Guid.NewGuid())">Detalles</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Punto Azul S.A.</td>
-                        <td class="priority5">18/08/2021</td>
-                        <td class="priority4">Ingresada</td>
-                        <td class="text-center">
-                            <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@(Guid.NewGuid())">Detalles</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+        if (PedidosEnSistema.Count > 0)
+        {
+            <h3><i class="fas fa-shopping-cart"></i>&nbsp;Tus pedidos</h3>
+            <hr/>
+            <div class="row">
+                <div class="col-12">
+                    <table id="tablaPedidos" class="table table-responsive-lg table-striped table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Empresa</th>
+                            <th class="priority5" scope="col">Fecha Ingreso</th>
+                            <th class="priority4" scope="col">Estado</th>
+                            <th class="priority3" scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var pedido in PedidosEnSistema)
+                        {
+                            <tr>
+                                <td>@pedido.EmpresaMandante.NombreEmpresa</td>
+                                <td>@pedido.FechaPedido.ToString("dd/MM/yyyy")</td>
+                                <td>@pedido.Estado.NombreEstado</td>
+                                <td>
+                                    <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="EditarPedido" asp-route-guidPedido="@pedido.GuidPedido">Detalles</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center">
+                <h5><i class="fas fa-exclamation-circle"></i>&nbsp;No tienes ningún pedido registrado en sistema.</h5>
+            </div>
+        }
         <div class="row col-12 d-flex justify-content-center">
-            <button class="btn btn-success" id="nuevoPedido"><i class="fas fa-user-plus"></i>&nbsp;Ingresar nuevo pedido</button>
+            <a class="btn btn-success" id="nuevoPedido" asp-controller="Pedidos" asp-action="Grupos"><i class="fas fa-user-plus"></i>&nbsp;Ingresar nuevo pedido</a>
         </div>
     }
 </div>
@@ -158,6 +189,27 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                 }
             });
+            BuscarPedidos();
         });
+
+        function BuscarPedidos() {
+            $.ajax({
+                url: "@Url.Action("ObtenerPedidos","Pedidos")",
+                type: 'POST',
+                async: true,
+                success : function(data) {
+                    let results = $.parseJSON(JSON.stringify(data));
+                    console.table(results);
+                }, error : function(response) {
+                    Swal.fire({
+                        title: '¡Error!',
+                        text: response.responseText,
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
     </script>
 }

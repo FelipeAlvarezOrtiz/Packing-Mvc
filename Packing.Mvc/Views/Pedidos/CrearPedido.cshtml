@@ -1,27 +1,51 @@
-﻿@page  
-<script src="~/jqwidgets/jqxbuttons.js"></script>  
-<script src="~/jqwidgets/jqxscrollbar.js"></script>  
-<script src="~/jqwidgets/jqxlistbox.js"></script>  
-<script src="~/jqwidgets/jqxdropdownlist.js"></script>  
-<script src="~/jqwidgets/jqxdatatable.js"></script>  
-<script src="~/jqwidgets/jqxbuttons.js"></script>  
+﻿@using Packing.Mvc.Models.Pedidos
 @{
-//var Productos = ViewData["Productos"] as List<string>;
+    var Productos = ViewData["Productos"] as List<Producto>;
+    var ProductoEnCarro = ViewData["ProductosEnCarro"] as List<DetallePedidoDto>;
 }
 <h2><i class="far fa-edit"></i>&nbsp;Crear Pedido</h2>
 <hr />
 <div class="container-fluid">
-    <p>Busca tus productos y </p>
-    <!--Aqui iterar por cada producto y agregar al carrito -->
-    <div id="productos container py-2">
-        @*@foreach (var producto in Productos)
-        {
+    @if (Productos.Count > 0)
+    {
+        <div class="row alert alert-info">
+            <p>
+                Selecciona el producto que te interese y luego indica la cantidad que necesitas según el formato.
+                @if (ProductoEnCarro.Count > 0)
+                {
+                    <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="VerCarro">Ir al carro</a>
+                }
+            </p>
+        </div>
+        <div class="row">
+            @foreach (var producto in Productos)
+            {
+                <div class="col-md-4 p-3">
+                    <div class="card">
+                        <img class="card-img-top p-3" src="~/images/productos/repollo crespo.png" alt="Imagen de grupo">
+                        <div class="card-body">
+                            <h6 class="card-title">@producto.NombreParaBusqueda</h6>
+                            <p class="card-text">Grupo : @producto.Grupo.NombreGrupo.</p>
+                            @*<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>*@
+                            <a class="btn-sm btn-info" asp-controller="VistaProductos" asp-action="VerProducto" asp-route-idProducto="@producto.IdProducto">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
             <div>
-
+                <h5 class="alert alert-info text-center">&nbsp; No existen productos para el grupo seleccionado</h5>
             </div>
-        }*@
-    </div>
-    <jqx-button on-click="eventHandler()">Button</jqx-button>
+            <div>
+                <a class="btn btn-info" asp-controller="Pedidos" asp-action="Grupos"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+            </div>
+        </div>
+    }
+    <hr/>
 </div>
 
 @section Scripts {
@@ -44,9 +68,6 @@
         function RefrescarFiltro() {
 
         }
-
-        function eventHandler(event) {
-            alert('Hola');
-        }
+        
     </script>
 }

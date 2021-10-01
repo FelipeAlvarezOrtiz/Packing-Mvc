@@ -18,4 +18,8 @@ namespace Packing.Mvc.Models.Empresas
         [MinLength(10, ErrorMessage = "No cumple con la cantidad mínima de carácteres"), MaxLength(50, ErrorMessage = "Cantidad de carácteres máximos excedidos"), Required(ErrorMessage = "El dato es requerido.")]
         public string PersonaContacto { get; set; }
     }
+
+    public record EmpresaDto(string nombreEmpresa, string razonSocial, string rutEmpresa, string direccion, string personaContacto,string nombreUsuario,int rolUsuario,string emailUsuario,string telefono);
+
+    public record ExisteEmpresaDto(string rutEmpresa);
 }

@@ -1,0 +1,41 @@
+﻿@using Packing.Mvc.Models.Empresas
+@{
+    var GruposExistentes = ViewData["GruposExitentes"] as List<GrupoProducto>;
+}
+<h2><i class="far fa-edit"></i>&nbsp;Crear Pedido</h2>
+<hr />
+<div class="container-fluid">
+    @if (GruposExistentes.Count <= 0)
+    {
+        <div class="row">
+            <div class="col">
+                <h5 class="alert alert-info">No existen grupos creados en sistema</h5>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var grupo in GruposExistentes)
+            {
+                <div class="col-md-4 p-3">
+                    <div class="card">
+                        @*<img class="card-img-top p-3" src="~/images/productos/@grupo.NombreGrupo" alt="Imagen de grupo">*@
+                        <img class="card-img-top p-3" src="~/images/productos/repollo crespo.png" alt="Imagen de grupo">
+                        <div class="card-body">
+                            <h6 class="card-title">@grupo.NombreGrupo</h6>
+                            <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="CrearPedido" asp-route-idGrupo="@grupo.IdGrupo">Ver productos</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    <hr />
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+
+    </script>
+}

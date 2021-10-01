@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Packing.Mvc.Data;
 
 namespace Packing.Mvc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210928151713_Notificaciones")]
+    partial class Notificaciones
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,9 +330,6 @@ namespace Packing.Mvc.Data.Migrations
                     b.Property<int>("Criticidad")
                         .HasColumnType("int");
 
-                    b.Property<string>("FechaIngresada")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MensajeNotificacion")
                         .HasColumnType("nvarchar(max)");
 
@@ -360,15 +359,10 @@ namespace Packing.Mvc.Data.Migrations
                     b.Property<long>("CantidadTotales")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid?>("PedidoGuidPedido")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int?>("ProductoInternoIdProducto")
                         .HasColumnType("int");
 
                     b.HasKey("IdDetalle");
-
-                    b.HasIndex("PedidoGuidPedido");
 
                     b.HasIndex("ProductoInternoIdProducto");
 
@@ -531,10 +525,6 @@ namespace Packing.Mvc.Data.Migrations
 
             modelBuilder.Entity("Packing.Mvc.Models.Pedidos.DetallePedido", b =>
                 {
-                    b.HasOne("Packing.Mvc.Models.Pedidos.Pedido", null)
-                        .WithMany("ProductosEnPedido")
-                        .HasForeignKey("PedidoGuidPedido");
-
                     b.HasOne("Packing.Mvc.Models.Producto", "ProductoInterno")
                         .WithMany()
                         .HasForeignKey("ProductoInternoIdProducto");
@@ -585,11 +575,6 @@ namespace Packing.Mvc.Data.Migrations
                         .HasForeignKey("EmpresaIdEmpresa");
 
                     b.Navigation("Empresa");
-                });
-
-            modelBuilder.Entity("Packing.Mvc.Models.Pedidos.Pedido", b =>
-                {
-                    b.Navigation("ProductosEnPedido");
                 });
 #pragma warning restore 612, 618
         }

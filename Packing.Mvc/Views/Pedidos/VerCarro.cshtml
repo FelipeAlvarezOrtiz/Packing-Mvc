@@ -1,26 +1,136 @@
 ﻿@using Packing.Mvc.Models.Pedidos
 @{
     var ProductosEnCarro = new List<DetallePedidoDto>();
-    try
-    {
-        ProductosEnCarro = ViewData["ProductosEnCarro"] as List<DetallePedidoDto>;
-    }
-    catch (Exception)
-    {
-
-    }
+    ProductosEnCarro = ViewData["ProductosEnCarro"] as List<DetallePedidoDto>;
 }
+<a class="btn btn-info" asp-controller="Pedidos" asp-action="Grupos"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+<hr />
 <div class="container-fluid">
-    @if (ProductosEnCarro.Count > 0)
-    {
-        @foreach (var producto in ProductosEnCarro)
+        @if (ProductosEnCarro.Count > 0)
         {
-            <p>@producto.productoDto.NombreParaBusqueda con @producto.cantidad</p><br/>
+            <div class="row">
+                <div class="col-12">
+                    <table id="productosEnCarro" class="table table-responsive-lg table-striped table-bordered rounded">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th class="priority5" scope="col">Cantidad unitaria</th>
+                            <th class="priority4" scope="col">Cantidad total</th>
+                            <th scope="col" class="text-center">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var producto in ProductosEnCarro)
+                        {@*<p>@producto.productoDto.NombreParaBusqueda con @producto.cantidad</p><br />*@
+                            <tr>
+                                <td>@producto.productoDto.NombreParaBusqueda</td>
+                                <td>@producto.cantidad</td>
+                                <td>@(producto.productoDto.Formato.UnidadPorFormato * producto.cantidad) unidades</td>
+                                <td class="text-center">
+                                    @*<a class="btn btn-primary text-white">Actualizar</a>*@
+                                    <a class="btn btn-danger text-white" onclick="BorrarDelCarro(@producto.productoDto.IdProducto)"><i class="fas fa-trash-alt"></i>&nbsp;Borrar</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <label for="observaciones"><i class="fas fa-pencil-alt"></i>&nbsp;Observaciones</label>
+                <textarea class="form-control rounded-0" cols="20" rows="5" id="observaciones" placeholder="Adjunte cualquier dato necesario (opcional) ..."></textarea>
+            </div>
         }
-    }
-    else
-    {
-        <p>No hay productos en el carro.</p>
-        <a asp-controller="Home" asp-action="VistaProductos">Hacer un pedido</a>
-    }
+        else
+        {
+            <div class="row col-12 alert alert-info text-center">
+                <h5><i class="fas fa-exclamation-circle"></i>&nbsp;No tienes ningún pedido pendiente de envio.</h5>
+            </div>
+        }
+        <hr />
+        <div class="col-12 text-center">
+            <h5><a class="btn btn-info" asp-controller="Pedidos" asp-action="Grupos"><i class="fas fa-cart-plus"></i>&nbsp;Agregar productos al pedido</a></h5>
+        </div>
+        @if (ProductosEnCarro.Count > 0)
+        {
+            <hr/>
+            <div class="col-12 text-center">
+                <h5><a class="btn btn-success text-white" onclick="GuardarPedido()"><i class="far fa-paper-plane"></i>&nbsp;Enviar Pedido</a></h5>
+            </div>
+        }
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#productosEnCarro').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function BorrarDelCarro(idProducto) {
+            $.ajax({
+                url: "@Url.Action("EliminarProductoDelCarro", "Pedidos")",
+                async: true,
+                data: "{ \"idProducto\" :  "+idProducto+" }",
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    Swal.fire(
+                        '¡Confirmado!',
+                        'Se ha eliminado el producto del carro.',
+                        'success'
+                    ).then((result) => {
+                        location.reload();
+                    });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function GuardarPedido() {
+            $.ajax({
+                url: "@Url.Action("IngresarPedido", "Pedidos")",
+                async: true,
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
+                    Swal.fire(
+                        '¡Confirmado!',
+                        'Se ha ingresado el pedido correctamente.',
+                        'success'
+                    ).then((result) => {
+                        location.reload();
+                    });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+    </script>
+}

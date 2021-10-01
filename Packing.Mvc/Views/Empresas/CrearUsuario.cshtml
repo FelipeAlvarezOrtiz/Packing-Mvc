@@ -28,12 +28,12 @@
 <h4><i class="fas fa-user-plus"></i>&nbsp;@ViewData["Titulo"]</h4>
 <hr />
 <div class="container-fluid rounded-left border-left border-right" style="background-color: #F1F6F9 ">
-    <form id="form-empresa" method="post" asp-controller="Empresas" asp-action="CrearUsuario">
+    @*<form id="form-empresa" method="post" asp-controller="Empresas" asp-action="CrearEmpresa">*@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.UserName" class="col-form-label">Nombre de usuario</label>
-                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" required autocomplete="off" />
+                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" id="userName" required autocomplete="off" />
                     <span asp-validation-for="@Model.UserName" class="text-dangwer"></span>
                 </div>
             </div>
@@ -57,14 +57,14 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.RutEmpresa" class="col-form-label">Rut de la empresa</label>
-                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control validarRut" id="rutEmpresa" />
+                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control validarRut" id="rutEmpresa" onblur="ValidarEmpresa()" />
                     <span asp-validation-for="@Model.Empresa.RutEmpresa" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.NombreEmpresa" class="col-form-label">Nombre de la empresa</label>
-                    <input asp-for="@Model.Empresa.NombreEmpresa" class="form-control" autocomplete="off" />
+                    <input asp-for="@Model.Empresa.NombreEmpresa" class="form-control" id="nombreEmpresa" autocomplete="off" />
                     <span asp-validation-for="@Model.Empresa.NombreEmpresa" class="text-danger"></span>
                 </div>
             </div>
@@ -73,14 +73,14 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.PersonaContacto" class="col-form-label">Persona de contacto</label>
-                    <input asp-for="@Model.Empresa.PersonaContacto" class="form-control" autocomplete="off" />
+                    <input asp-for="@Model.Empresa.PersonaContacto" class="form-control" autocomplete="off" id="personaContacto" />
                     <span asp-validation-for="@Model.Empresa.PersonaContacto" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
-                    <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required />
+                    <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required id="razonSocial" />
                     <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
                 </div>
             </div>
@@ -90,7 +90,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label asp-for="@Model.Empresa.Direccion" class="col-form-label"><i class="fas fa-map-marked-alt"></i>&nbsp;Dirección</label>
-                    <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" />
+                    <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" id="direccion"/>
                     <span asp-validation-for="@Model.Empresa.Direccion" class="text-danger"></span>
                 </div>
             </div>
@@ -99,22 +99,22 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.Email" class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
-                    <input type="email" asp-for="@Model.Email" class="form-control email" autocomplete="off" required />
+                    <input type="email" asp-for="@Model.Email" class="form-control email" autocomplete="off" required id="emailEmpresa" />
                     <span asp-validation-for="@Model.Email" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="@Model.PhoneNumber" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
-                    <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" required placeholder="+569 987654321" />
+                    <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" id="telefonoEmpresa" required placeholder="+569 987654321" />
                     <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
         </div>
         <div class="row col-12 text-center">
-            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-success" onclick="CrearUsuario()">Guardar</button>
         </div>
-    </form>
+    @*</form>*@
     <hr />
 </div>
 
@@ -160,7 +160,7 @@
 
         function ValidarEmpresa() {
             let rutEmpresa = $("#rutEmpresa").val();
-            const dataString = "{ \"RutEmpresa\" : \""+rutEmpresa+"\" }";
+            const dataString = "{ \"rutEmpresa\" : \"" + rutEmpresa + "\" }";
             $.ajax({
                 url: "@Url.Action("ObtieneDatosDeEmpresa", "Empresas")",
                 type: "POST",
@@ -168,12 +168,19 @@
                 async: true,
                 contentType: "application/json; charset=utf-8",
                 success: function(response) {
-                    Swal.fire({
-                        title: '¡Exito!',
-                        text: response.responseText,
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
-                    });
+                    let results = $.parseJSON(JSON.stringify(response));
+                    if (results.idEmpresa) {
+                        $("#rutEmpresa").val(results.rutEmpresa);
+                        $("#rutEmpresa").attr("disabled",'true');
+                        $("#nombreEmpresa").val(results.nombreEmpresa);
+                        $("#nombreEmpresa").attr("disabled", 'true');
+                        $("#razonSocial").val(results.razonSocial);
+                        $("#razonSocial").attr("disabled", 'true');
+                        $("#direccion").val(results.direccion);
+                        $("#direccion").attr("disabled", 'true');
+                        $("#personaContacto").val(results.personaContacto);
+                        $("#personaContacto").attr("disabled", 'true');
+                    }
                 },
                 error: function(response) {
                     Swal.fire({
@@ -184,6 +191,59 @@
                     });
                 }
             });
+        }
+
+        function CrearUsuario() {
+            let rutEmpresa = $("#rutEmpresa").val();
+            let nombreEmpresa = $("#nombreEmpresa").val();
+            let razonSocial = $("#razonSocial").val();
+            let direccion = $("#direccion").val();
+            let personaContacto = $("#personaContacto").val();
+            let nombreUsuario = $("#userName").val();
+            let rolUsuario = $("#rolSelect").val();
+            let emailUsuario = $("#emailEmpresa").val();
+            let telefono = $("#telefonoEmpresa").val();
+            if (rutEmpresa.length > 0 && nombreEmpresa.length > 0 && razonSocial.length > 0 && direccion.length > 0 && personaContacto.length > 0 && nombreUsuario.length > 0 && rolUsuario.length > 0 && emailUsuario.length > 0 && telefono.length > 0) {
+                const dataString = "{ " +
+                                    "\"nombreEmpresa\" : \"" + nombreEmpresa + "\", " +
+                                    "\"razonSocial\" : \"" + razonSocial + "\", " +
+                                    "\"rutEmpresa\" : \"" + rutEmpresa + "\", " +
+                                    "\"direccion\" : \"" + direccion + "\", " +
+                                    "\"personaContacto\" : \"" + personaContacto + "\"," +
+                                    "\"nombreUsuario\" : \"" + nombreUsuario + "\"," +
+                                    "\"rolUsuario\" : " + rolUsuario + "," +
+                                    "\"emailUsuario\" : \"" + emailUsuario + "\"," +
+                                    "\"telefono\" : \"" + telefono + "\"" +
+                                    "}";
+                $.ajax({
+                    url: "@Url.Action("CrearEmpresa", "Empresas")",
+                    type: "POST",
+                    data: dataString,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El usuario ha sido creado correctamente, se le ha asignado una contraseña por defecto la cual puede cambiar al iniciar sesión.',
+                            'success',
+                        );
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Todos los campos son requeridos.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }
         }
 
     </script>

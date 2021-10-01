@@ -13,7 +13,7 @@
             <form id="empresa-form" method="post">
                 <div class="form-group">
                     <label asp-for="NombreEmpresa"></label>
-                    <input asp-for="NombreEmpresa" class="form-control" disabled />
+                    <input asp-for="NombreEmpresa" class="form-control" disabled id="nombreEmpresa"/>
                     <span asp-validation-for="NombreEmpresa" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="RutEmpresa"></label>
-                    <input asp-for="RutEmpresa" class="form-control" disabled />
+                    <input asp-for="RutEmpresa" class="form-control" id="rutEmpresa" disabled />
                     <span asp-validation-for="RutEmpresa" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -47,7 +47,7 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
     <script type="text/javascript">
         function ActualizarDatos() {
             Swal.fire({
@@ -61,11 +61,39 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    EnviarNotificacion();
+                }
+            });
+        }
+
+        function EnviarNotificacion() {
+            const mensajeNotificacion = "La empresa "+$("#nombreEmpresa").val()+" con R.U.T " + $("#rutEmpresa").val() + " solicita cambio de datos. Contactarse al correo para coordinar.";
+            const dataString = "{" +
+                                " \"tipoNotificacion\" : 2 ,"+
+                                " \"nombreNotificacion\" : \"Solicitud de cambio de datos\","+
+                                " \"criticidad\" : 2,"+
+                                " \"mensajeNotificacion\" : \""+ mensajeNotificacion +"\" "+
+                "}";
+            console.log(dataString);
+            $.ajax({
+                url: "@Url.Action("GuardarNotificacion", "Notificaciones")",
+                type: "POST",
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success: function(response) {
                     Swal.fire(
                         '¡Confirmado!',
                         'Se ha enviado un email de confirmación.',
                         'success'
                     );
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: '¡Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 }
             });
         }

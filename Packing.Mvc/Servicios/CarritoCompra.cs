@@ -10,7 +10,7 @@ namespace Packing.Mvc.Servicios
 {
     public class CarritoCompra : ICarroCompra, IDisposable
     {
-        private readonly List<DetallePedidoDto> Productos = new();
+        private List<DetallePedidoDto> Productos = new();
         private readonly IConfiguration _config;
         private readonly SqlConnection _connection;
 
@@ -37,7 +37,17 @@ namespace Packing.Mvc.Servicios
 
         public void EliminarProductoDelCarro(DetallePedidoDto producto)
         {
-            throw new System.NotImplementedException();
+            var nuevaLista = new List<DetallePedidoDto>();
+            foreach (var productoDto in Productos)
+            {
+                if (productoDto.productoDto.IdProducto != producto.productoDto.IdProducto)
+                {
+                    nuevaLista.Add(productoDto);
+                }
+            }
+
+            Productos = nuevaLista;
+            //Productos.Remove(producto);
         }
 
         public void ActualizarCarrito(DetallePedidoDto producto)

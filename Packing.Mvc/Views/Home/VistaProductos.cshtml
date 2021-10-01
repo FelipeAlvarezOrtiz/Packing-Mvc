@@ -472,7 +472,6 @@
                 success: function(data) {
                     let results = $.parseJSON(JSON.stringify(data));
                     document.getElementById('grupoSelected').innerHTML = "";
-                    console.table(results);
                     $.each(results,
                         function(i, d) {
                             $('#grupoSelected').append('<option value = "' + d.idGrupo + '">' + d.nombreGrupo + '</option>');

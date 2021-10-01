@@ -14,4 +14,6 @@ namespace Packing.Mvc.Models.Pedidos
 
     public record DetallePedidoDto(Producto productoDto,int cantidad);
     public record AgregarPedido(int idProducto, int cantidadProducto);
+    public record EliminarProductoDelPedido(int idProducto);
+
 }

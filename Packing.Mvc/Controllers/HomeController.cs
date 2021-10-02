@@ -61,9 +61,10 @@ namespace Packing.Mvc.Controllers
             return View();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Pedidos()
         {
+            ViewData["Empresas"] = await _context.Empresas.ToListAsync();
             ViewData["Pedidos"] = await _context.Pedidos.Include(x => x.Estado).Where(x => x.Estado.IdEstadoPedido > 0)
                 .Include(x => x.EmpresaMandante).Include(x => x.Estado).OrderByDescending(x => x.FechaPedido).ToListAsync();
             return View();

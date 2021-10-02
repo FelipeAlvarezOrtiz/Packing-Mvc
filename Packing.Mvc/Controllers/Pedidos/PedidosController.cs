@@ -30,7 +30,7 @@ namespace Packing.Mvc.Controllers
         public async Task<IActionResult> EditarPedido(Guid guidPedido)
         {
             ViewData["PedidoId"] = guidPedido.ToString();
-            ViewData["Estados"] = await _context.EstadosPedidos.ToListAsync();
+            ViewData["Estados"] = await _context.EstadosPedidos.Where(pedido => !pedido.NombreEstado.Equals("Rechazado")).ToListAsync();
             var datosDelPedido = await _context.Pedidos.Where(x => x.GuidPedido.Equals(guidPedido))
                 .Include(x => x.EmpresaMandante).Include(x => x.Estado)
                 .Include(x => x.ProductosEnPedido).ThenInclude(x => x.ProductoInterno).FirstOrDefaultAsync();
@@ -62,8 +62,9 @@ namespace Packing.Mvc.Controllers
         [Authorize]
         public async Task<IActionResult> CrearPedido(int idGrupo)
         {
-            ViewData["Productos"] = await _context.Productos.Include(x => x.Grupo).Where(x => x.Grupo.IdGrupo == idGrupo)
-                                                .Include(x => x.Formato).Include(x => x.Presentacion).ToListAsync();
+            ViewData["Productos"] = await _context.Productos.Where(producto => producto.Disponibilidad).Include(x => x.Grupo)
+                                            .Where(x => x.Grupo.IdGrupo == idGrupo).Include(x => x.Formato)
+                                            .Include(x => x.Presentacion).ToListAsync();
             ViewData["ProductosEnCarro"] = _carro.ObtenerProductosDelCarro();
             return View();
         }

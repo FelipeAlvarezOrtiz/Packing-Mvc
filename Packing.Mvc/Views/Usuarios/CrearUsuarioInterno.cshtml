@@ -1,0 +1,105 @@
+﻿@using Packing.Mvc.Models.Usuarios
+@{
+    var listaRoles = ViewData["RolesInternos"] as List<CargoInterno>;
+}
+
+<hr />
+<h4><i class="fas fa-user-plus"></i>&nbsp; Agregar trabajador de Los Colonos</h4>
+<hr />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="userName" class="col-form-label">Nombre de usuario</label>
+                <input class="form-control" id="userName" required autocomplete="off" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="rutUsuario" class="col-form-label">Rut de usuario</label>
+                <input class="form-control validarRut" id="rutUsuario" placeholder="12345678-9" required autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <br />
+    <h5><i class="far fa-address-card"></i>&nbsp;Datos del usuario</h5>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="telefonoUsuario" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
+                <input class="form-control" autocomplete="off" id="telefonoUsuario" required placeholder="+569 987654321" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
+                <input type="email" class="form-control email" autocomplete="off" placeholder="ejemplo@empresa.cl" required id="emailEmpresa" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="rolSelect" class="col-form-label"><i class="fas fa-user-tag"></i>&nbsp;Rol del usuario</label>
+                <select id="rolSelect" class="form-control">
+                    <option value="0">-- ROL --</option>
+                    @foreach (var rol in listaRoles)
+                    {
+                        <option value="@rol.IdCargo">@rol.NombreCargo</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row text-center">
+        <div class="col-sm-12 d-flex justify-content-center">
+            <button type="submit" class="btn btn-success" onclick="CrearUsuario()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script type="text/javascript">
+        function CrearUsuario() {
+            const dataString = "";
+            $.ajax({
+                url: '@Url.Action("CrearUsuarioInterno","Usuarios")',
+                type: 'POST',
+                async: true,
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+
+                },
+                error: function(response) {
+
+                }
+            });
+        }
+
+        function ValidaUsuario() {
+            let rutUsuario = $("#rutUsuario").val();
+            const dataString = "{ \"rutUsuario\" : \""+rutUsuario+"\" }";
+            $.ajax({
+                url: '@Url.Action("ExisteUsuario","Usuarios")',
+                type: 'POST',
+                async: true,
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: '¡Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+    </script>
+}

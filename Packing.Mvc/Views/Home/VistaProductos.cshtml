@@ -206,7 +206,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Nuevo Formato</h5>
+                <h5 class="modal-title">Nueva presentación</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -216,7 +216,7 @@
                     <div class="row form-group">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="col-form-label" for="nuevoNombrePresentacion">Nombre</label>
+                                <label class="col-form-label" for="nuevoNombrePresentacion">Nombre de la nueva presentación</label>
                                 <input class="form-control" type="text" id="nuevoNombrePresentacion" />
                             </div>
                         </div>
@@ -225,7 +225,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="GuardarNuevaPresentacion()">Guardar</button>
             </div>
         </div>
     </div>
@@ -273,7 +273,7 @@
                             title: 'Error!',
                             text: 'Ha ocurrido un error',
                             icon: 'error',
-                            confirmButtonText: 'Cool'
+                            confirmButtonText: 'Ok'
                         });
                     }
                 });
@@ -282,7 +282,7 @@
                     title: 'Error!',
                     text: 'No puede ingresar un grupo sin nombre',
                     icon: 'error',
-                    confirmButtonText: 'Cool'
+                    confirmButtonText: 'Ok'
                 });
             }
         }
@@ -314,7 +314,7 @@
                             title: 'Error!',
                             text: response.responseText,
                             icon: 'error',
-                            confirmButtonText: 'Cool'
+                            confirmButtonText: 'Ok'
                         });
                     }
                 });
@@ -323,7 +323,7 @@
                     title: 'Error!',
                     text: 'Verifique los campos.',
                     icon: 'error',
-                    confirmButtonText: 'Cool'
+                    confirmButtonText: 'Ok'
                 });
             }
         }
@@ -334,7 +334,7 @@
                 $.ajax({
                     url: "@Url.Action("InsertarPresentacion", "Presentaciones")",
                     type: "POST",
-                    data: "{\"NombrePresentacion\": \" " + +" \"}",
+                    data: "{\"NombrePresentacion\": \" " + nombrePresentacion +" \"}",
                     contentType: "application/json; charset=utf-8",
                     success: function() {
                         Swal.fire({
@@ -353,7 +353,7 @@
                             title: 'Error!',
                             text: response.responseText,
                             icon: 'error',
-                            confirmButtonText: 'Cool'
+                            confirmButtonText: 'Ok'
                         });
                     }
                 });
@@ -362,7 +362,7 @@
                     title: 'Error!',
                     text: 'No puede ingresar una presentación sin nombre.',
                     icon: 'error',
-                    confirmButtonText: 'Cool'
+                    confirmButtonText: 'Ok'
                 });
             }
         }
@@ -397,7 +397,7 @@
                             title: 'Error!',
                             text: response.responseText,
                             icon: 'error',
-                            confirmButtonText: 'Cool'
+                            confirmButtonText: 'Ok'
                         });
                     }
                 });
@@ -406,7 +406,7 @@
                     title: 'Error!',
                     text: 'El nombre del producto no puede ser vacio.',
                     icon: 'error',
-                    confirmButtonText: 'Cool'
+                    confirmButtonText: 'Ok'
                 });
             }
         }
@@ -490,14 +490,14 @@
 
         function EliminarProducto(idProducto) {
             $.ajax({
-                url: "@Url.Action("ObtenerGrupos", "Grupos")",
+                url: "@Url.Action("EliminarProducto", "Productos")",
                 type: "POST",
                 data: "{ \"IdProducto\" : "+idProducto+" }",
                 contentType: "application/json; charset=utf-8",
                 success: function() {
                     Swal.fire({
                         title: '¡Exito!',
-                        text: 'Se han actualizado correctamente los datos.',
+                        text: 'Se ha eliminado el producto.',
                         icon: 'success',
                         confirmButtonText: 'Ok'
                     }).then(function() {
@@ -506,7 +506,7 @@
                 },
                 error: function(response) {
                     Swal.fire({
-                        title: 'Error!',
+                        title: '¡Error!',
                         text: response.responseText,
                         icon: 'error',
                         confirmButtonText: 'Ok'

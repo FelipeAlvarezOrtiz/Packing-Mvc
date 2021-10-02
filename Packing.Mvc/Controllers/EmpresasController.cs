@@ -27,8 +27,10 @@ namespace Packing.Mvc.Controllers
             _roleManager = roleManager;
         }
 
-        public IActionResult CrearUsuario()
+        public async Task<IActionResult> CrearUsuario()
         {
+            var resultadoRoles = await _roleManager.Roles.Select(rol => rol.Name).ToListAsync();
+            ViewData["Roles"] = resultadoRoles;
             return View();
         }
         

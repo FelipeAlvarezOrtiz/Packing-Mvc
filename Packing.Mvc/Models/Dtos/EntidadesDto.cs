@@ -8,5 +8,5 @@ namespace Packing.Mvc.Models.Dtos
     public record NuevoFormato(string nombreFormato, int unidadesPorFormato);
     public record NuevaPresentacion(string NombrePresentacion);
     public record BorrarProducto(int idProducto);
-    
+
 }

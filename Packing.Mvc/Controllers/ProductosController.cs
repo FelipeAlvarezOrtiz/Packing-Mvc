@@ -50,7 +50,12 @@ namespace Packing.Mvc.Controllers
         [HttpPost("EliminarProducto"),Authorize(Roles = "Administrador")]
         public async Task<ActionResult> EliminarProducto(BorrarProducto request)
         {
-            return Ok();
+            var productoEntidad = await _context.Productos.Where(producto => producto.IdProducto == request.idProducto)
+                .FirstOrDefaultAsync();
+            if (productoEntidad is null) return BadRequest("El producto solicitado ya no existe.");
+            productoEntidad.Disponibilidad = false;
+            _context.Update(productoEntidad);
+            return await _context.SaveChangesAsync() > 0 ? Ok() : BadRequest("Ha ocurrido un error al eliminar el producto.");
         }
 
         [HttpPost("ActualizarProducto"),Authorize(Roles = "Administrador")]

@@ -1,7 +1,9 @@
 ﻿@using Packing.Mvc.Models.Pedidos
+@using Packing.Mvc.Models.Empresas
 @{
     ViewData["Title"] = "Listado de pedidos";
     var Pedidos = ViewData["Pedidos"] as List<Pedido>;
+    var Empresas = ViewData["Empresas"] as List<Empresa>;
 }
 <h3>&nbsp;Pedidos en sistema</h3>
 <hr />
@@ -26,6 +28,10 @@
                 <label for="desdeFecha" class="col-form-label">Empresa</label>
                 <select id="empresaId" class="form-control">
                     <option value="0">--Seleccione empresa --</option>
+                    @foreach (var empresa in Empresas)
+                    {
+                        <option value="@empresa.IdEmpresa">@empresa.NombreEmpresa</option>
+                    }
                 </select>
             </div>
         </div>

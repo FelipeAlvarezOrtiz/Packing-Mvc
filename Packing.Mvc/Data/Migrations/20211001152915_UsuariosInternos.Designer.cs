@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Packing.Mvc.Data;
 
 namespace Packing.Mvc.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211001152915_UsuariosInternos")]
+    partial class UsuariosInternos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,30 +225,6 @@ namespace Packing.Mvc.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Packing.Mvc.Models.Configuraciones.Configuraciones", b =>
-                {
-                    b.Property<int>("IdConfiguracion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CorreoDestino")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NombreEmpresaCentral")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NombreGerentaOperaciones")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TelefonoDestino")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdConfiguracion");
-
-                    b.ToTable("Configuraciones");
                 });
 
             modelBuilder.Entity("Packing.Mvc.Models.Empresas.Empresa", b =>
@@ -524,14 +502,6 @@ namespace Packing.Mvc.Data.Migrations
                     b.Property<string>("NumeroTelefono")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("RutUsuario")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<bool>("UsuarioActivo")
-                        .HasColumnType("bit");
 
                     b.HasKey("IdUsuario");
 

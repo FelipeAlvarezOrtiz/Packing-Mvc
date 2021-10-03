@@ -1,0 +1,196 @@
+﻿@using Packing.Mvc.Models.Usuarios
+@{
+    var UsuarioEdit = ViewData["UsuarioInterno"] as UsuarioInterno;
+    var CargosInternos = ViewData["CargosInternos"] as List<CargoInterno>;
+}
+<hr />
+<h4><i class="fas fa-user-edit"></i>&nbsp; Editar trabajador de Los Colonos</h4>
+<hr />
+<div class="container-fluid">
+    @if (!UsuarioEdit.UsuarioActivo)
+    {
+        <div class="alert alert-danger text-center" id="alertaRechazo"><h4>ESTE USUARIO HA SIDO DESHABILITADO POR GERENTA DE OPERACIONES.</h4></div>
+        <br/>
+    }
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="userName" class="col-form-label">Nombre</label>
+                <input class="form-control" id="userName" value="@UsuarioEdit.NombreUsuario" required autocomplete="off" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="rutUsuario" class="col-form-label">Rut de usuario</label>
+                <input class="form-control validarRut" id="rutUsuario" value="@UsuarioEdit.RutUsuario" disabled required autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <br />
+    <h5><i class="far fa-address-card"></i>&nbsp;Datos del usuario</h5>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="telefonoUsuario" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
+                <input class="form-control" autocomplete="off" id="telefonoUsuario" value="@UsuarioEdit.NumeroTelefono" required placeholder="+569 987654321" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
+                <input type="email" class="form-control email" autocomplete="off" placeholder="ejemplo@empresa.cl" value="@UsuarioEdit.CorreoUsuario" required id="emailEmpresa" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="rolSelect" class="col-form-label"><i class="fas fa-user-tag"></i>&nbsp;Rol del usuario</label>
+                <select id="rolSelect" class="form-control">
+                    <option value="0">-- ROL --</option>
+                    @foreach (var cargo in CargosInternos)
+                    {
+                        if (cargo.IdCargo == UsuarioEdit.Cargo.IdCargo)
+                        {
+                            <option value="@cargo.IdCargo" selected>@cargo.NombreCargo</option>
+                        }
+                        else
+                        {
+                            <option value="@cargo.IdCargo">@cargo.NombreCargo</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row text-center">
+        @if (UsuarioEdit.UsuarioActivo)
+        {
+            <div class="col-md-6 d-flex justify-content-center">
+                <button type="submit" class="btn btn-danger" onclick="DeshabilitarUsuario(@UsuarioEdit.IdUsuario)"><i class="fas fa-user-times"></i>&nbsp;Deshabilitar</button>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-6 d-flex justify-content-center">
+                <button type="submit" class="btn btn-info" onclick="HabilitarUsuario(@UsuarioEdit.IdUsuario)"><i class="fas fa-user-plus"></i>&nbsp;Habilitar</button>
+            </div>
+        }
+        <div class="col-md-6 d-flex justify-content-center">
+            <button type="submit" class="btn btn-success" onclick="ActualizarUsuario(@UsuarioEdit.IdUsuario)"><i class="fas fa-sync"></i>&nbsp;Actualizar</button>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        function ActualizarUsuario(idUsuario) {
+            let nombreUsuario = $("#userName").val();
+            let telefonoUsuario = $("#telefonoUsuario").val();
+            let emailUsuario = $("#emailEmpresa").val();
+            let idCargo = $("#rolSelect").val();
+            const dataString = "{" +
+                "\"idUsuario\" : \"" + idUsuario + "\", " +
+                "\"nombreUsuario\" : \"" + nombreUsuario + "\", " +
+                "\"correoUsuario\" : \"" + emailUsuario +"\", " +
+                "\"numeroTelefono\" : \"" + telefonoUsuario + "\", " +
+                "\"idCargoInterno\" : " + idCargo + " " +
+                "}";
+            if (idCargo > 0 && nombreUsuario.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("InsertarUsuario", "Usuarios")',
+                    type: 'POST',
+                    async: true,
+                    data: dataString,
+                    contentType: "application/json; charset=utf-8",
+                    success: function() {
+                        Swal.fire({
+                            title: '¡Exito!',
+                            text: 'Usuario de la empresa, agregado con exito.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: '¡Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: '¡Error!',
+                    text: 'Verifica todos los campos.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        }
+
+        function DeshabilitarUsuario(idUsuario) {
+            const dataString = "{" +
+                "\"idUsuario\" : " + idUsuario + " " +
+                "}";
+            $.ajax({
+                url: '@Url.Action("DeshabilitarUsuario", "Usuarios")',
+                type: 'POST',
+                async: true,
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se ha deshabilitado al usuario.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then(function() {
+                        location.reload();
+                    });
+                    
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: '¡Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+        function HabilitarUsuario(idUsuario) {
+            const dataString = "{" +
+                "\"idUsuario\" : " + idUsuario + " " +
+                "}";
+            $.ajax({
+                url: '@Url.Action("HabilitarUsuario", "Usuarios")',
+                type: 'POST',
+                async: true,
+                data: dataString,
+                contentType: "application/json; charset=utf-8",
+                success: function() {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se ha habilitado al usuario.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    });
+                },
+                error: function(response) {
+                    Swal.fire({
+                        title: '¡Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,10 +1,158 @@
-﻿@{
-    var guidEdit = ViewData["guid"] as string;
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Titulo"] = "Editar usuario";
+    var guidAppUser =  ViewData["GuidUser"] as string;
+    var listaRoles = ViewData["Roles"] as List<string>;
+    var usuarioEdit = ViewData["Usuario"] as AppUser;
+    var rolActual = ViewData["RolDelUsuario"] as string;
 }
-<p>Editar Usuario</p>
-<p>@guidEdit</p>
-<div class="container-fluid">
-    <form method="post" asp-controller="Empresas">
+<style>
+    .input-icons i {
+        position: absolute;
+    }
 
-    </form>
+    .input-icons {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .icon {
+        padding: 10px;
+        min-width: 40px;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+</style>
+<hr />
+<h4><i class="fas fa-user-edit"></i>&nbsp;@ViewData["Titulo"]</h4>
+<hr />
+<div class="container-fluid rounded-left border-left border-right" style="background-color: #F1F6F9 ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="userName" class="col-form-label">Nombre de usuario</label>
+                <input class="form-control" id="userName" value="@(usuarioEdit.UserName?? string.Empty)" disabled required autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <br />
+    <h5><i class="far fa-building"></i>&nbsp;Datos de la empresa</h5>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="rutEmpresa" class="col-form-label">Rut de la empresa</label>
+                <input class="form-control validarRut" id="rutEmpresa" value="@usuarioEdit.Empresa.RutEmpresa" disabled />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nombreEmpresa" class="col-form-label">Nombre de la empresa</label>
+                <input class="form-control" id="nombreEmpresa" value="@usuarioEdit.Empresa.NombreEmpresa"  autocomplete="off" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="personaContacto" class="col-form-label">Persona de contacto</label>
+                <input class="form-control" autocomplete="off" value="@usuarioEdit.Empresa.PersonaContacto" id="personaContacto" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="razonSocial" class="col-form-label">Razón social</label>
+                <input class="form-control" autocomplete="off" value="@usuarioEdit.Empresa.RazonSocial" required id="razonSocial" />
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="direccion" class="col-form-label"><i class="fas fa-map-marked-alt"></i>&nbsp;Dirección</label>
+                <input class="form-control" autocomplete="off" value="@usuarioEdit.Empresa.Direccion" id="direccion" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="emailEmpresa" class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
+                <input type="email" class="form-control email" value="@usuarioEdit.Email" autocomplete="off" required id="emailEmpresa" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="telefonoEmpresa" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
+                <input type="tel" class="form-control" autocomplete="off" value="@usuarioEdit.PhoneNumber" id="telefonoEmpresa" required placeholder="+569 987654321" />
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row col-12 d-flex justify-content-center text-center">
+        <button class="btn btn-success" onclick="ActualizarUsuario('@guidAppUser')">Actualizar</button>
+    </div>
+    <br />
+    <hr />
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script type="text/javascript">
+        function ActualizarUsuario(guidUser) {
+            let rutEmpresa = $("#rutEmpresa").val();
+            let nombreEmpresa = $("#nombreEmpresa").val();
+            let razonSocial = $("#razonSocial").val();
+            let direccion = $("#direccion").val();
+            let personaContacto = $("#personaContacto").val();
+            let emailUsuario = $("#emailEmpresa").val();
+            let telefono = $("#telefonoEmpresa").val();
+            if (rutEmpresa.length > 0 && nombreEmpresa.length > 0 && razonSocial.length > 0 && direccion.length > 0 && personaContacto.length > 0 && emailUsuario.length > 0 && telefono.length > 0) {
+                const dataString = "{ " +
+                    "\"idAppuser\" : \"" + guidUser + "\", " +
+                    "\"nombreEmpresa\" : \"" + nombreEmpresa + "\", " +
+                    "\"razonSocial\" : \"" + razonSocial + "\", " +
+                    "\"rutEmpresa\" : \"" + rutEmpresa + "\", " +
+                    "\"direccion\" : \"" + direccion + "\", " +
+                    "\"personaContacto\" : \"" + personaContacto + "\"," +
+                    "\"emailUsuario\" : \"" + emailUsuario + "\"," +
+                    "\"telefono\" : \"" + telefono + "\"" +
+                    "}";
+                $.ajax({
+                    url: "@Url.Action("ActualizarEmpresaUser", "Empresas")",
+                    type: "POST",
+                    data: dataString,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(response) {
+                        Swal.fire(
+                            '¡Eliminado!',
+                            'El usuario ha sido actualizado correctamente.',
+                            'success',
+                        );
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Todos los campos son requeridos.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        }
+    </script>
+}

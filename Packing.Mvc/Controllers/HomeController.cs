@@ -67,6 +67,10 @@ namespace Packing.Mvc.Controllers
             ViewData["Empresas"] = await _context.Empresas.ToListAsync();
             ViewData["Pedidos"] = await _context.Pedidos.Include(x => x.Estado).Where(x => x.Estado.IdEstadoPedido > 0)
                 .Include(x => x.EmpresaMandante).Include(x => x.Estado).OrderByDescending(x => x.FechaPedido).ToListAsync();
+            ViewData["Cosecheros"] = await _context.UsuariosInternos.Include(userInterno => userInterno.Cargo)
+                .Where(userInterno => userInterno.Cargo.IdCargo == 2 && userInterno.UsuarioActivo).ToListAsync();
+            ViewData["JefesDePacking"] = await _context.UsuariosInternos.Include(userInterno => userInterno.Cargo)
+                .Where(userInterno => userInterno.Cargo.IdCargo == 1 && userInterno.UsuarioActivo).ToListAsync();
             return View();
         }
 
@@ -75,6 +79,7 @@ namespace Packing.Mvc.Controllers
         {
             var result = await _context.Usuarios.Include(user => user.Empresa).ToListAsync();
             ViewData["Usuarios"] = result;
+            ViewData["UsuariosInternos"] = await _context.UsuariosInternos.Include(userInterno => userInterno.Cargo).ToListAsync();
             return View();
         }
 

@@ -34,9 +34,12 @@ namespace Packing.Mvc.Controllers
             return View();
         }
         
-        public IActionResult EditarUsuario(string userId)
+        public async Task<IActionResult> EditarUsuario(string userId)
         {
             ViewData["guid"] = userId;
+            ViewData["Roles"] = await _context.Roles.Select(rol => rol.Name).ToListAsync();
+            var userEdit = await _context.Usuarios.Where(user => user.Id.Equals(userId)).Include(user => user.Empresa).FirstOrDefaultAsync();
+            ViewData["Usuario"] = userEdit;
             return View();
         }
 
@@ -100,6 +103,27 @@ namespace Packing.Mvc.Controllers
                 await _userManager.AddToRoleAsync(resultUsuarioConsulta, "Cliente");
             return Ok();
 
+        }
+
+        [HttpPost("ActualizarEmpresaUser"), Authorize(Roles = "Administrador")]
+        public async Task<ActionResult> ActualizarEmpresaUser([FromBody]ActualizarEmpresa request)
+        {
+            var resultUsuario = await _userManager.FindByEmailAsync(request.emailUsuario);
+            if (resultUsuario is null) return BadRequest("Ese usuario no existe.");
+            var resultEmpresa = await _context.Empresas.Where(x => x.RutEmpresa.Equals(request.rutEmpresa.Replace(".", "")))
+                .FirstOrDefaultAsync();
+            if (resultEmpresa is null) return BadRequest("Esa empresa no existe.");
+            resultEmpresa.Direccion = request.direccion;
+            resultEmpresa.NombreEmpresa = request.nombreEmpresa;
+            resultEmpresa.RazonSocial = request.razonSocial;
+            resultEmpresa.PersonaContacto = request.personaContacto;
+            _context.Empresas.Update(resultEmpresa);
+            resultUsuario.PhoneNumber = request.telefono;
+            resultUsuario.Email = request.emailUsuario;
+            _context.Usuarios.Update(resultUsuario);
+            return await _context.SaveChangesAsync() > 0
+                ? Ok()
+                : BadRequest("Ha ocurrido un error al actualizar los datos, intentelo más tarde.");
         }
     }
 }

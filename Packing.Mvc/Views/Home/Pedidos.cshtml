@@ -1,9 +1,12 @@
 ﻿@using Packing.Mvc.Models.Pedidos
 @using Packing.Mvc.Models.Empresas
+@using Packing.Mvc.Models.Usuarios
 @{
     ViewData["Title"] = "Listado de pedidos";
     var Pedidos = ViewData["Pedidos"] as List<Pedido>;
     var Empresas = ViewData["Empresas"] as List<Empresa>;
+    var Cosecheros = (ViewData["Cosecheros"] as List<UsuarioInterno>)?? new List<UsuarioInterno>();
+    var Jefes = (ViewData["JefesDePacking"] as List<UsuarioInterno>)?? new List<UsuarioInterno>();
 }
 <h3>&nbsp;Pedidos en sistema</h3>
 <hr />
@@ -94,36 +97,68 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
-                <label class="col-form-label">Seleccione cosechero</label>
-                <select class="form-control">
-                    <option value="0">--SIN ASIGNAR--</option>
-                    <option value="0">COSECHERO DE PRUEBA</option>
-                </select>
-            </div>
+            @if (Cosecheros.Count > 0)
+            {
+                <div class="form-group">
+                    <label class="col-form-label">Seleccione cosechero</label>
+                    <select class="form-control">
+                        <option value="0">--SIN ASIGNAR--</option>
+                        @foreach (var cosechero in Cosecheros)
+                        {
+                            <option value="@cosechero.IdUsuario">@cosechero.NombreUsuario</option>
+                        }
+                    </select>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No tienes cosecheros ingresados al sistema.</h4></div>
+            }
         </div>
         <div class="col-md-6">
-            <div class="form-group">
-                <label class="col-form-label">Seleccione jefe de packing</label>
-                <select class="form-control">
-                    <option value="0">--SIN ASIGNAR--</option>
-                    <option value="0">JEFE DE PRUEBA</option>
-                </select>
+            @if (Jefes.Count > 0)
+            {
+                <div class="form-group">
+                    <label class="col-form-label">Seleccione jefe de packing</label>
+                    <select class="form-control">
+                        <option value="0">--SIN ASIGNAR--</option>
+                        @foreach (var jefe in Jefes)
+                        {
+                            <option value="@jefe.IdUsuario">@jefe.NombreUsuario</option>
+                        }
+                    </select>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center"><h4><i class="fas fa-info-circle"></i>&nbsp;No tienes jefes de packing ingresados al sistema.</h4></div>
+            }
+        </div>
+    </div>
+    @if (Jefes.Count > 0 && Cosecheros.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <a class="btn btn-success"><i class="fab fa-whatsapp"></i>&nbsp;Obtener información</a>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-success" href="https://wa.me/56944194679?text=Necesito%2015000%20repollos%20para%20cosechar%20" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i>&nbsp;Enviar información</a>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <a class="btn btn-success" href="https://wa.me/56944194679?text=Necesito%2015000%20repollos%20para%20cosechar%20" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i>&nbsp;Enviar información</a>
-        </div>
-    </div>
+    }
+    <button class="btn" onclick="AgruparPedidos()">Evaluar</button>
     <hr />
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>
+    <link rel="stylesheet" href="/js/pickadate/themes/default.css"/>
+    <link rel="stylesheet" href="/js/pickadate/themes/default.date.css"/>
+    @*<link rel="stylesheet" href="/js/pickadate/themes/rtl.css"/>*@
+    <script type="text/javascript" src="/js/pickadate/picker.js"></script>
+    <script type="text/javascript" src="/js/pickadate/picker.date.js"></script>
+    <script type="text/javascript" src="/js/pickadate/translations/es_ES.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('#tablaPedidos').DataTable({
@@ -137,26 +172,20 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                 }
             });
+            $('#desdeFecha').pickadate({
+                
+            });
         });
 
-        function RechazarPedido() {
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: "Este proceso enviará una notificación al cliente.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Rechazar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire(
-                        '¡Rechazado!',
-                        'Se ha enviado un email de confirmación.',
-                        'success'
-                    );
-                    document.getElementById('alertaRechazo').removeAttribute('hidden');
+        function AgruparPedidos() {
+            $.ajax({
+                url: '@Url.Action("ObtenerCantidadACosechar","Reporteria")',
+                type: 'POST',
+                async: true,
+                success: function() {
+                    console.log('exito');
+                }, error: function() {
+
                 }
             });
         }

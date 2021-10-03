@@ -22,4 +22,6 @@ namespace Packing.Mvc.Models.Empresas
     public record EmpresaDto(string nombreEmpresa, string razonSocial, string rutEmpresa, string direccion, string personaContacto,string nombreUsuario,int rolUsuario,string emailUsuario,string telefono);
 
     public record ExisteEmpresaDto(string rutEmpresa);
+
+    public record ActualizarEmpresa(string idAppUser, string nombreEmpresa, string razonSocial, string rutEmpresa, string direccion, string personaContacto, string emailUsuario,string telefono);
 }

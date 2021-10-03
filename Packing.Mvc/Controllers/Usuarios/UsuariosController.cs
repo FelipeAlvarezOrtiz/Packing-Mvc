@@ -31,7 +31,7 @@ namespace Packing.Mvc.Controllers.Usuarios
         {
             var usuarioInterno = await _context.UsuariosInternos.Where(user => user.RutUsuario.Equals(request.rutUsuario))
                 .FirstOrDefaultAsync();
-            if (usuarioInterno is null) return BadRequest("Ese usuario ya está registrado en el sistema.");
+            if (usuarioInterno is not null) return BadRequest("Ese usuario ya está registrado en el sistema.");
             var cargo = await _context.CargosInternos.Where(cargo => cargo.IdCargo == request.idCargoInterno).FirstOrDefaultAsync();
             if (cargo is null) return BadRequest("Ese cargo no existe.");
             usuarioInterno = new UsuarioInterno()
@@ -75,7 +75,7 @@ namespace Packing.Mvc.Controllers.Usuarios
         [HttpPost("DeshabilitarUsuario"),Authorize(Roles = "Administrador")]
         public async Task<ActionResult> DeshabilitarUsuario([FromBody]DeshabilitarUsuario request)
         {
-            var usuario = await _context.UsuariosInternos.Where(user => user.IdUsuario == request.idUsuario)
+            var usuario = await _context.UsuariosInternos.Where(user => user.IdUsuario == request.idUsuario).Include(user => user.Cargo)
                 .FirstOrDefaultAsync();
             if (usuario is null) return BadRequest("El usuario a actualizar no existe en sistema.");
             if (!usuario.UsuarioActivo) return BadRequest("El usuario ya esta deshabilitado");
@@ -100,5 +100,43 @@ namespace Packing.Mvc.Controllers.Usuarios
             ViewData["RolesInternos"] = await _context.CargosInternos.ToListAsync();
             return View();
         }
+
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> EditarUsuarioInterno(int idUsuario)
+        {
+            ViewData["CargosInternos"] = await _context.CargosInternos.ToListAsync();
+            ViewData["UsuarioInterno"] = await _context.UsuariosInternos.Where(user => user.IdUsuario == idUsuario)
+                .Include(user => user.Cargo).FirstOrDefaultAsync();
+            return View();
+        }
+
+        [HttpPost("ActualizarUsuarioInterno"),Authorize(Roles = "Administrador")]
+        public async Task<ActionResult> ActualizarUsuarioInterno([FromBody] ActualizarUsuarioInterno request)
+        {
+            var usuario = await _context.UsuariosInternos.Where(user => user.IdUsuario == request.idUsuario)
+                .Include(user => user.Cargo).FirstOrDefaultAsync();
+            if (usuario is null) return BadRequest("El usuario a actualizar no existe");
+            var cargo = await _context.CargosInternos.Where(cargo => cargo.IdCargo == request.idCargoInterno).FirstOrDefaultAsync();
+            if (cargo is null) return BadRequest("El cargo no existe.");
+            usuario.Cargo = cargo;
+            usuario.CorreoUsuario = request.correoUsuario;
+            usuario.NumeroTelefono = request.numeroTelefono;
+            usuario.NombreUsuario = request.nombreUsuario;
+            _context.UsuariosInternos.Update(usuario);
+            return await _context.SaveChangesAsync() > 0 ? Ok() : BadRequest("Ha ocurrido un error al actualizar el usuario interno.");
+        }
+
+        [HttpPost("HabilitarUsuario"), Authorize(Roles = "Administrador")]
+        public async Task<ActionResult> HabilitarUsuario([FromBody] DeshabilitarUsuario request)
+        {
+            var usuario = await _context.UsuariosInternos.Where(user => user.IdUsuario == request.idUsuario).Include(user => user.Cargo)
+                .FirstOrDefaultAsync();
+            if (usuario is null) return BadRequest("El usuario a actualizar no existe en sistema.");
+            if (usuario.UsuarioActivo) return BadRequest("El usuario ya esta habilitado");
+            usuario.UsuarioActivo = true;
+            _context.UsuariosInternos.Update(usuario);
+            return await _context.SaveChangesAsync() > 0 ? Ok() : BadRequest("Ha ocurrido un error al deshabilitar al usuario");
+        }
+
     }
 }

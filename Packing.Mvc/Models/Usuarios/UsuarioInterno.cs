@@ -30,7 +30,8 @@ namespace Packing.Mvc.Models.Usuarios
     public record NuevoUsuarioInterno(string nombreUsuario,string rutUsuario,string numeroTelefono, string correoUsuario,int idCargoInterno);
     public record NuevoCargo(string nombreCargo);
     public record ActualizarUsuario(int idUsuario, string nombreUsuario, string rutUsuario, string numeroTelefono, string correoUsuario, int idCargoInterno);
-    public record DeshabilitarUsuario(int idUsuario, int activo);
+    public record ActualizarUsuarioInterno(int idUsuario, string nombreUsuario,string numeroTelefono, string correoUsuario, int idCargoInterno);
+    public record DeshabilitarUsuario(int idUsuario);
     public record ExisteUsuario(string rutUsuario);
 
 }

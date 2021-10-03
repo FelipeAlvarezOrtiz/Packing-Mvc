@@ -2,7 +2,6 @@
 @{
     var listaRoles = ViewData["RolesInternos"] as List<CargoInterno>;
 }
-
 <hr />
 <h4><i class="fas fa-user-plus"></i>&nbsp; Agregar trabajador de Los Colonos</h4>
 <hr />
@@ -17,7 +16,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="rutUsuario" class="col-form-label">Rut de usuario</label>
-                <input class="form-control validarRut" id="rutUsuario" placeholder="12345678-9" required autocomplete="off" />
+                <input class="form-control validarRut" id="rutUsuario" placeholder="12345678-9" onblur="ValidaUsuario()" required autocomplete="off" />
             </div>
         </div>
     </div>
@@ -63,29 +62,58 @@
     <partial name="_ValidationScriptsPartial"/>
     <script type="text/javascript">
         function CrearUsuario() {
-            const dataString = "";
-            $.ajax({
-                url: '@Url.Action("CrearUsuarioInterno","Usuarios")',
-                type: 'POST',
-                async: true,
-                data: dataString,
-                contentType: "application/json; charset=utf-8",
-                success: function() {
-
-                },
-                error: function(response) {
-
-                }
-            });
+            let rutUsuario = $("#rutUsuario").val();
+            let nombreUsuario = $("#userName").val();
+            let telefonoUsuario = $("#telefonoUsuario").val();
+            let emailUsuario = $("#emailEmpresa").val();
+            let idCargo = $("#rolSelect").val();
+            const dataString = "{" +
+                "\"nombreUsuario\" : \"" + nombreUsuario + "\", " +
+                "\"rutUsuario\" : \"" + rutUsuario +"\", " +
+                "\"correoUsuario\" : \"" + emailUsuario +"\", " +
+                "\"numeroTelefono\" : \"" + telefonoUsuario + "\", " +
+                "" + "\"idCargoInterno\" : " + idCargo + " " +
+                "}";
+            if (idCargo > 0 && nombreUsuario.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("InsertarUsuario", "Usuarios")',
+                    type: 'POST',
+                    async: true,
+                    data: dataString,
+                    contentType: "application/json; charset=utf-8",
+                    success: function() {
+                        Swal.fire({
+                            title: '¡Exito!',
+                            text: 'Usuario de la empresa, agregado con exito.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: '¡Error!',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: '¡Error!',
+                    text: 'Verifica todos los campos.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }
         }
 
         function ValidaUsuario() {
             let rutUsuario = $("#rutUsuario").val();
-            const dataString = "{ \"rutUsuario\" : \""+rutUsuario+"\" }";
+            const dataString = "{ \"rutUsuario\" : \"" + rutUsuario + "\" }";
             $.ajax({
-                url: '@Url.Action("ExisteUsuario","Usuarios")',
+                url: '@Url.Action("ExisteUsuario", "Usuarios")',
                 type: 'POST',
-                async: true,
                 data: dataString,
                 contentType: "application/json; charset=utf-8",
                 success: function() {

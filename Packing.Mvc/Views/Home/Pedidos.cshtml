@@ -43,7 +43,7 @@
         <div class="col-md-4"></div>
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <button type="submit" class="btn btn-info"><i class="fas fa-filter"></i>&nbsp;Filtrar</button>
+            <button type="submit" class="btn btn-info" onclick="FiltrarDatos()"><i class="fas fa-filter"></i>&nbsp;Filtrar</button>
         </div>
     </div>
     <h4><i class="fas fa-boxes"></i>&nbsp;@ViewData["Title"]</h4>
@@ -140,7 +140,7 @@
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <a class="btn btn-success"><i class="fab fa-whatsapp"></i>&nbsp;Obtener información</a>
+                <a class="btn btn-success"><i class="far fa-file-pdf"></i>&nbsp;Obtener información</a>
             </div>
             <div class="col-md-4">
                 <a class="btn btn-success" href="https://wa.me/56944194679?text=Necesito%2015000%20repollos%20para%20cosechar%20" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i>&nbsp;Enviar información</a>
@@ -175,6 +175,9 @@
             $('#desdeFecha').pickadate({
                 
             });
+            $('#hastaFecha').pickadate({
+
+            });
         });
 
         function AgruparPedidos() {
@@ -187,6 +190,15 @@
                 }, error: function() {
 
                 }
+            });
+        }
+
+        function FiltrarDatos() {
+            Swal.fire({
+                title: 'Información',
+                text: 'Esta caracteristica estará disponible en la segunda iteración.',
+                icon: 'info',
+                confirmButtonText: 'Ok'
             });
         }
     </script>

@@ -2,6 +2,8 @@
 @{
     var GruposExistentes = ViewData["GruposExitentes"] as List<GrupoProducto>;
 }
+<a class="btn btn-info" asp-controller="Home" asp-action="Index"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+<br/>
 <h2><i class="far fa-edit"></i>&nbsp;Crear Pedido</h2>
 <hr />
 <div class="container-fluid">
@@ -21,7 +23,7 @@
                 <div class="col-md-4 p-3">
                     <div class="card">
                         @*<img class="card-img-top p-3" src="~/images/productos/@grupo.NombreGrupo" alt="Imagen de grupo">*@
-                        <img class="card-img-top p-3" src="~/images/productos/repollo crespo.png" alt="Imagen de grupo">
+                        <img class="card-img-top p-3" src="~/images/productos/@grupo.Imagen" alt="Imagen de grupo">
                         <div class="card-body">
                             <h6 class="card-title">@grupo.NombreGrupo</h6>
                             <a class="btn-sm btn-info" asp-controller="Pedidos" asp-action="CrearPedido" asp-route-idGrupo="@grupo.IdGrupo">Ver productos</a>

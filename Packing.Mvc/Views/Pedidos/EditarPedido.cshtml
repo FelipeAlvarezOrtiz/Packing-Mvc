@@ -122,7 +122,14 @@ else
                         <select class="form-control" id="estadoPedido">
                             @foreach (var estado in Estados)
                             {
-                                <option value="@estado.IdEstadoPedido">@estado.NombreEstado</option>
+                                if (estado.IdEstadoPedido == Pedido.Estado.IdEstadoPedido)
+                                {
+                                    <option value="@estado.IdEstadoPedido" selected="">@estado.NombreEstado</option>
+                                }
+                                else
+                                {
+                                    <option value="@estado.IdEstadoPedido">@estado.NombreEstado</option>
+                                }
                             }
                         </select>
                     </div>

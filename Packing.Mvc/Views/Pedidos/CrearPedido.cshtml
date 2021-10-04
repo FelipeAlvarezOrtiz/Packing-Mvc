@@ -3,6 +3,8 @@
     var Productos = ViewData["Productos"] as List<Producto>;
     var ProductoEnCarro = ViewData["ProductosEnCarro"] as List<DetallePedidoDto>;
 }
+<a class="btn btn-info" asp-controller="Pedidos" asp-action="Grupos"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+<br/>
 <h2><i class="far fa-edit"></i>&nbsp;Crear Pedido</h2>
 <hr />
 <div class="container-fluid">
@@ -22,7 +24,7 @@
             {
                 <div class="col-md-4 p-3">
                     <div class="card">
-                        <img class="card-img-top p-3" src="~/images/productos/repollo crespo.png" alt="Imagen de grupo">
+                        <img class="card-img-top p-3" src="~/images/productos/@producto.Grupo.Imagen" alt="Imagen de grupo">
                         <div class="card-body">
                             <h6 class="card-title">@producto.NombreParaBusqueda</h6>
                             <p class="card-text">Grupo : @producto.Grupo.NombreGrupo.</p>

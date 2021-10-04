@@ -2,6 +2,8 @@
 @{
     var listaRoles = ViewData["RolesInternos"] as List<CargoInterno>;
 }
+<a class="btn btn-info" asp-controller="Home" asp-action="ConfiguracionUsuario"><i class="fas fa-pencil-alt"></i>&nbsp;Volver atrás</a>
+<br />
 <hr />
 <h4><i class="fas fa-user-plus"></i>&nbsp; Agregar trabajador de Los Colonos</h4>
 <hr />
@@ -49,7 +51,7 @@
             </div>
         </div>
     </div>
-    <hr/>
+    <hr />
     <div class="row text-center">
         <div class="col-sm-12 d-flex justify-content-center">
             <button type="submit" class="btn btn-success" onclick="CrearUsuario()">Guardar</button>
@@ -59,7 +61,7 @@
 
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
         function CrearUsuario() {
             let rutUsuario = $("#rutUsuario").val();

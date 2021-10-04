@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Packing.Mvc.Data;
@@ -16,6 +17,48 @@ namespace Packing.Mvc.Controllers.Reporteria
         public ReporteriaController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Index()
+        {
+            var diccionarioGrupos = new Dictionary<string, uint>();
+            var diccionarioJefePacking = new Dictionary<string, uint>();
+            var datosDelPedido = await _context.Pedidos.Include(pedido => pedido.Estado)
+                .Where(pedido => pedido.Estado.IdEstadoPedido == 1)
+                .Include(pedido => pedido.ProductosEnPedido).ThenInclude(detalles => detalles.ProductoInterno)
+                .ToListAsync();
+            foreach (var detalle in datosDelPedido.SelectMany(pedido => pedido.ProductosEnPedido))
+            {
+                detalle.ProductoInterno = await _context.Productos
+                    .Where(x => x.IdProducto == detalle.ProductoInterno.IdProducto)
+                    .Include(x => x.Formato).Include(x => x.Presentacion)
+                    .Include(x => x.Grupo).FirstAsync();
+                //agregamos la cantidad del grupo
+                if (diccionarioGrupos.ContainsKey(detalle.ProductoInterno.Grupo.NombreGrupo))
+                {
+                    var cantidadAnterior = diccionarioGrupos[detalle.ProductoInterno.Grupo.NombreGrupo];
+                    var nuevaCantidad = cantidadAnterior + detalle.CantidadTotales;
+                    diccionarioGrupos[detalle.ProductoInterno.Grupo.NombreGrupo] = nuevaCantidad;
+                }
+                else
+                {
+                    diccionarioGrupos.Add(detalle.ProductoInterno.Grupo.NombreGrupo, detalle.CantidadTotales);
+                }
+                if (diccionarioJefePacking.ContainsKey(detalle.ProductoInterno.NombreParaBusqueda))
+                {
+                    var cantidadAnterior = diccionarioJefePacking[detalle.ProductoInterno.NombreParaBusqueda];
+                    var nuevaCantidad = cantidadAnterior + detalle.Cantidad;
+                    diccionarioJefePacking[detalle.ProductoInterno.NombreParaBusqueda] = nuevaCantidad;
+                }
+                else
+                {
+                    diccionarioJefePacking.Add(detalle.ProductoInterno.NombreParaBusqueda, detalle.Cantidad);
+                }
+            }
+            ViewData["DatosCosechero"] = diccionarioGrupos;
+            ViewData["DatosJefePacking"] = diccionarioJefePacking;
+            return View();
         }
 
         [HttpPost]

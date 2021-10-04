@@ -41,7 +41,7 @@ namespace Packing.Mvc.Areas.Identity.Pages.Account.Manage
             public string OldPassword { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "La nueva contraseña debe tener al menos {2} y un máximo de {1} caracteres.", MinimumLength = 12)]
+            [StringLength(60, ErrorMessage = "La nueva contraseña debe tener al menos {2} y un máximo de {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Nueva contraseña")]
             public string NewPassword { get; set; }

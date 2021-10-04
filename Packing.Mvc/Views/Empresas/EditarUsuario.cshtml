@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @{
     ViewData["Titulo"] = "Editar usuario";
-    var guidAppUser =  ViewData["GuidUser"] as string;
+    var guidAppUser = ViewData["GuidUser"] as string;
     var listaRoles = ViewData["Roles"] as List<string>;
     var usuarioEdit = ViewData["Usuario"] as AppUser;
     var rolActual = ViewData["RolDelUsuario"] as string;
@@ -27,6 +27,8 @@
         text-align: center;
     }
 </style>
+<a class="btn btn-info" asp-controller="Home" asp-action="ConfiguracionUsuario"><i class="fas fa-pencil-alt"></i>&nbsp;Volver atrás</a>
+<br />
 <hr />
 <h4><i class="fas fa-user-edit"></i>&nbsp;@ViewData["Titulo"]</h4>
 <hr />
@@ -52,7 +54,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="nombreEmpresa" class="col-form-label">Nombre de la empresa</label>
-                <input class="form-control" id="nombreEmpresa" value="@usuarioEdit.Empresa.NombreEmpresa"  autocomplete="off" />
+                <input class="form-control" id="nombreEmpresa" value="@usuarioEdit.Empresa.NombreEmpresa" autocomplete="off" />
             </div>
         </div>
     </div>
@@ -93,7 +95,7 @@
             </div>
         </div>
     </div>
-    <hr/>
+    <hr />
     <div class="row col-12 d-flex justify-content-center text-center">
         <button class="btn btn-success" onclick="ActualizarUsuario('@guidAppUser')">Actualizar</button>
     </div>
@@ -103,7 +105,7 @@
 
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
         function ActualizarUsuario(guidUser) {
             let rutEmpresa = $("#rutEmpresa").val();

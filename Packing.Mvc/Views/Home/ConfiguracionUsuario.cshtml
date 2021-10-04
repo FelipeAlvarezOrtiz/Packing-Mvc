@@ -58,7 +58,7 @@
                             <td class="priority4">@user.Empresa.PersonaContacto</td>
                             <td class="text-center">
                                 <a class="btn-sm btn-info" asp-controller="Empresas" asp-action="EditarUsuario" asp-route-userId="@user.Id"><i class="far fa-edit"></i>&nbsp;Editar</a>
-                                <a class="btn-sm btn-danger text-white" id="borrarUsuario" onclick="borrarUsuario()"><i class="fas fa-user-slash"></i>&nbsp;Borrar</a>
+                                @*<a class="btn-sm btn-danger text-white" id="borrarUsuario" onclick="borrarUsuario()"><i class="fas fa-user-slash"></i>&nbsp;Borrar</a>*@
                             </td>
                         </tr>
                     }

@@ -19,7 +19,7 @@ namespace Packing.Mvc.Models.Empresas
         public string PersonaContacto { get; set; }
     }
 
-    public record EmpresaDto(string nombreEmpresa, string razonSocial, string rutEmpresa, string direccion, string personaContacto,string nombreUsuario,int rolUsuario,string emailUsuario,string telefono);
+    public record EmpresaDto(string nombreEmpresa, string razonSocial, string rutEmpresa, string direccion, string personaContacto,string nombreUsuario,string rolUsuario,string emailUsuario,string telefono);
 
     public record ExisteEmpresaDto(string rutEmpresa);
 

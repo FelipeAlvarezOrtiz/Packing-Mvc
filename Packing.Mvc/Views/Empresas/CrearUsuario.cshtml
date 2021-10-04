@@ -24,103 +24,104 @@
         text-align: center;
     }
 </style>
-
+<a class="btn btn-info" asp-controller="Home" asp-action="ConfiguracionUsuario"><i class="fas fa-pencil-alt"></i>&nbsp;Volver atrás</a>
+<br />
 <hr />
 <h4><i class="fas fa-user-plus"></i>&nbsp;@ViewData["Titulo"]</h4>
 <hr />
 <div class="container-fluid rounded-left border-left border-right" style="background-color: #F1F6F9 ">
     @*<form id="form-empresa" method="post" asp-controller="Empresas" asp-action="CrearEmpresa">*@
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="@Model.UserName" class="col-form-label">Nombre de usuario</label>
-                    <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" id="userName" required autocomplete="off" />
-                    <span asp-validation-for="@Model.UserName" class="text-dangwer"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="rolSelect" class="col-form-label">Rol del usuario</label>
-                    <select id="rolSelect" class="form-control">
-                        <option value="0">-- ROL --</option>
-                        @foreach (var rol in listaRoles)
-                        {
-                            <option value="@rol">@rol</option>
-                        }
-                    </select>
-                </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="@Model.UserName" class="col-form-label">Nombre de usuario</label>
+                <input asp-for="@Model.UserName" class="form-control" title="Con este dato el usuario iniciará sesión" id="userName" required autocomplete="off" />
+                <span asp-validation-for="@Model.UserName" class="text-dangwer"></span>
             </div>
         </div>
-        <br />
-        <h5><i class="far fa-building"></i>&nbsp;Datos de la empresa</h5>
-        <hr />
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="@Model.Empresa.RutEmpresa" class="col-form-label">Rut de la empresa</label>
-                    <input asp-for="@Model.Empresa.RutEmpresa" class="form-control validarRut" id="rutEmpresa" onblur="ValidarEmpresa()" />
-                    <span asp-validation-for="@Model.Empresa.RutEmpresa" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="@Model.Empresa.NombreEmpresa" class="col-form-label">Nombre de la empresa</label>
-                    <input asp-for="@Model.Empresa.NombreEmpresa" class="form-control" id="nombreEmpresa" autocomplete="off" />
-                    <span asp-validation-for="@Model.Empresa.NombreEmpresa" class="text-danger"></span>
-                </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="rolSelect" class="col-form-label">Rol del usuario</label>
+                <select id="rolSelect" class="form-control">
+                    <option value="0">-- ROL --</option>
+                    @foreach (var rol in listaRoles)
+                    {
+                        <option value="@rol">@rol</option>
+                    }
+                </select>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="@Model.Empresa.PersonaContacto" class="col-form-label">Persona de contacto</label>
-                    <input asp-for="@Model.Empresa.PersonaContacto" class="form-control" autocomplete="off" id="personaContacto" />
-                    <span asp-validation-for="@Model.Empresa.PersonaContacto" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
-                    <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required id="razonSocial" />
-                    <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
-                </div>
+    </div>
+    <br />
+    <h5><i class="far fa-building"></i>&nbsp;Datos de la empresa</h5>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="@Model.Empresa.RutEmpresa" class="col-form-label">Rut de la empresa</label>
+                <input asp-for="@Model.Empresa.RutEmpresa" class="form-control validarRut" id="rutEmpresa" onblur="ValidarEmpresa()" />
+                <span asp-validation-for="@Model.Empresa.RutEmpresa" class="text-danger"></span>
             </div>
         </div>
-        <hr />
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label asp-for="@Model.Empresa.Direccion" class="col-form-label"><i class="fas fa-map-marked-alt"></i>&nbsp;Dirección</label>
-                    <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" id="direccion"/>
-                    <span asp-validation-for="@Model.Empresa.Direccion" class="text-danger"></span>
-                </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="@Model.Empresa.NombreEmpresa" class="col-form-label">Nombre de la empresa</label>
+                <input asp-for="@Model.Empresa.NombreEmpresa" class="form-control" id="nombreEmpresa" autocomplete="off" />
+                <span asp-validation-for="@Model.Empresa.NombreEmpresa" class="text-danger"></span>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="@Model.Email" class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
-                    <input type="email" asp-for="@Model.Email" class="form-control email" autocomplete="off" required id="emailEmpresa" />
-                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="@Model.PhoneNumber" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
-                    <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" id="telefonoEmpresa" required placeholder="+569 987654321" />
-                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
-                </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="@Model.Empresa.PersonaContacto" class="col-form-label">Persona de contacto</label>
+                <input asp-for="@Model.Empresa.PersonaContacto" class="form-control" autocomplete="off" id="personaContacto" />
+                <span asp-validation-for="@Model.Empresa.PersonaContacto" class="text-danger"></span>
             </div>
         </div>
-        <div class="row col-12 text-center">
-            <button type="submit" class="btn btn-success" onclick="CrearUsuario()">Guardar</button>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="@Model.Empresa.RazonSocial" class="col-form-label">Razón social</label>
+                <input asp-for="@Model.Empresa.RazonSocial" class="form-control" autocomplete="off" required id="razonSocial" />
+                <span asp-validation-for="@Model.Empresa.RazonSocial" class="text-danger"></span>
+            </div>
         </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="@Model.Empresa.Direccion" class="col-form-label"><i class="fas fa-map-marked-alt"></i>&nbsp;Dirección</label>
+                <input asp-for="@Model.Empresa.Direccion" class="form-control" autocomplete="off" id="direccion" />
+                <span asp-validation-for="@Model.Empresa.Direccion" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="@Model.Email" class="col-form-label"><i class="fas fa-envelope"></i>&nbsp;Email</label>
+                <input type="email" asp-for="@Model.Email" class="form-control email" autocomplete="off" required id="emailEmpresa" />
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="@Model.PhoneNumber" class="col-form-label"><i class="fas fa-mobile-alt"></i>&nbsp;Número de teléfono</label>
+                <input type="tel" asp-for="@Model.PhoneNumber" class="form-control" autocomplete="off" id="telefonoEmpresa" required placeholder="+569 987654321" />
+                <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row col-12 text-center">
+        <button type="submit" class="btn btn-success" onclick="CrearUsuario()">Guardar</button>
+    </div>
     @*</form>*@
     <hr />
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -212,10 +213,11 @@
                                     "\"direccion\" : \"" + direccion + "\", " +
                                     "\"personaContacto\" : \"" + personaContacto + "\"," +
                                     "\"nombreUsuario\" : \"" + nombreUsuario + "\"," +
-                                    "\"rolUsuario\" : " + rolUsuario + "," +
+                                    "\"rolUsuario\" : \"" + rolUsuario + "\"," +
                                     "\"emailUsuario\" : \"" + emailUsuario + "\"," +
                                     "\"telefono\" : \"" + telefono + "\"" +
-                                    "}";
+                    "}";
+                console.log(dataString);
                 $.ajax({
                     url: "@Url.Action("CrearEmpresa", "Empresas")",
                     type: "POST",
@@ -223,10 +225,12 @@
                     contentType: "application/json; charset=utf-8",
                     success: function(response) {
                         Swal.fire(
-                            '¡Eliminado!',
-                            'El usuario ha sido creado correctamente, se le ha asignado una contraseña por defecto la cual puede cambiar al iniciar sesión.',
+                            '¡Confirmado!',
+                            'El usuario ha sido creado correctamente, se le ha asignado una contraseña por defecto \"Packing01-\" la cual puede cambiar al iniciar sesión.',
                             'success',
-                        );
+                        ).then(() => {
+                            location.reload();
+                        });
                     },
                     error: function(response) {
                         Swal.fire({

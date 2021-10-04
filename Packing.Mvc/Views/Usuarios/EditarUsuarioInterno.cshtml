@@ -3,6 +3,8 @@
     var UsuarioEdit = ViewData["UsuarioInterno"] as UsuarioInterno;
     var CargosInternos = ViewData["CargosInternos"] as List<CargoInterno>;
 }
+<a class="btn btn-info" asp-controller="Home" asp-action="ConfiguracionUsuario"><i class="fas fa-pencil-alt"></i>&nbsp;Volver atrás</a>
+<br />
 <hr />
 <h4><i class="fas fa-user-edit"></i>&nbsp; Editar trabajador de Los Colonos</h4>
 <hr />
@@ -10,7 +12,7 @@
     @if (!UsuarioEdit.UsuarioActivo)
     {
         <div class="alert alert-danger text-center" id="alertaRechazo"><h4>ESTE USUARIO HA SIDO DESHABILITADO POR GERENTA DE OPERACIONES.</h4></div>
-        <br/>
+        <br />
     }
     <div class="row">
         <div class="col-md-6">
@@ -150,7 +152,7 @@
                     }).then(function() {
                         location.reload();
                     });
-                    
+
                 },
                 error: function(response) {
                     Swal.fire({

@@ -100,7 +100,7 @@ namespace Packing.Mvc.Controllers
                     $"Ha ocurrido un error al intentar crear al usuario con mensaje {resultadoCreacion.Errors.ToString()}");
             var resultUsuarioConsulta = await _userManager.FindByEmailAsync(nuevoUsuario.Email);
             if (resultUsuarioConsulta is not null)
-                await _userManager.AddToRoleAsync(resultUsuarioConsulta, "Cliente");
+                await _userManager.AddToRoleAsync(resultUsuarioConsulta, request.rolUsuario);
             return Ok();
 
         }

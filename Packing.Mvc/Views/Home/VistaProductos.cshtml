@@ -56,7 +56,7 @@
     <hr />
 </div>
 
-<div class="modal fade" id="modalCrearProducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalCrearProducto" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -104,22 +104,22 @@
                         </div>
                     </div>
                 </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="col-form-label">Presentación</label>
-                                <div class="input-group">
-                                    <select class="form-control" id="presentacionSelected">
-                                        @foreach (var presentacion in Presentaciones)
-                                        {
-                                            <option value="@presentacion.IdPresentacion">@presentacion.NombrePresentacion</option>
-                                        }
-                                    </select>&nbsp;
-                                    <button class="btn btn-outline-info" id="botonNuevaPresentacion" onclick="$('#modalNuevaPresentacion').modal('show')"><i class="fas fa-plus-circle"></i></button>
-                                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-form-label">Presentación</label>
+                            <div class="input-group">
+                                <select class="form-control" id="presentacionSelected">
+                                    @foreach (var presentacion in Presentaciones)
+                                    {
+                                        <option value="@presentacion.IdPresentacion">@presentacion.NombrePresentacion</option>
+                                    }
+                                </select>&nbsp;
+                                <button class="btn btn-outline-info" id="botonNuevaPresentacion" onclick="$('#modalNuevaPresentacion').modal('show')"><i class="fas fa-plus-circle"></i></button>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -129,7 +129,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalNuevoGrupo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalNuevoGrupo" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
                 <div class="modal-header">
@@ -165,7 +165,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalNuevoFormato" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalNuevoFormato" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -202,7 +202,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalNuevaPresentacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="modalNuevaPresentacion" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">

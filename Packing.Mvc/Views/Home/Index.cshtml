@@ -200,7 +200,6 @@
                     "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
                 }
             });
-            BuscarPedidos();
         });
 
         function BuscarPedidos() {
@@ -210,7 +209,6 @@
                 async: true,
                 success : function(data) {
                     let results = $.parseJSON(JSON.stringify(data));
-                    console.table(results);
                 }, error : function(response) {
                     Swal.fire({
                         title: '¡Error!',

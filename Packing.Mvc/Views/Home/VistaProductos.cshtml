@@ -255,7 +255,37 @@
         });
 
         function GuardarNuevoGrupo() {
-            let nuevoGrupo = $('#nuevoGrupoText').val();
+            var formData = new FormData();
+            formData.append('nombreGrupo', $('#nuevoGrupoText').val());
+            formData.append('archivo', $('#grupoImage')[0].files[0]);
+
+            $.ajax({
+                url: '@Url.Action("GuardarGrupo","Grupos")',
+                data: formData,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                success : function() {
+                    Swal.fire({
+                        title: '¡Exito!',
+                        text: 'Se ha guardado correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    }).then(function() {
+                        RefrescarGrupos();
+                        $('#nuevoGrupoText').val('');
+                        $("#modalNuevoGrupo").modal('hide');
+                    });
+                },error : function(response) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: response.responseText,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+            @*let nuevoGrupo = $('#nuevoGrupoText').val();
             if (nuevoGrupo !== '') {
                 $.ajax({
                     url: "@Url.Action("GuardarGrupo", "Grupos")",
@@ -290,7 +320,7 @@
                     icon: 'error',
                     confirmButtonText: 'Ok'
                 });
-            }
+            }*@
         }
 
         function GuardarNuevoFormato() {

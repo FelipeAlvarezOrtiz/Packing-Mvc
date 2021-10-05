@@ -2,18 +2,77 @@
 @{
     var Presentacion = ViewData["Presentacion"] as Presentacion;
 }
+<a class="btn btn-info" asp-controller="Miscelaneos" asp-action="Index"><i class="fas fa-arrow-left"></i>&nbsp;Volver atras</a>
+<hr />
+<br />
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-        
+            <h4 class="alert alert-info"><i class="far fa-bookmark"></i>&nbsp;Editando presentacion - @Presentacion.NombrePresentacion</h4>
+        </div>
+        <br/>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="col-form-label" for="nuevoNombrePresentacion">Nombre de la presentacion</label>
+                <input class="form-control" type="text" id="nuevoNombrePresentacion" value="@Presentacion.NombrePresentacion"/>
+            </div>
         </div>
     </div>
+</div>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+            <button class="btn btn-success"><i class="fas fa-sync" onclick="ActualizarPresentacion(@Presentacion.IdPresentacion)"></i>&nbsp;Actualizar</button>
+        </div>
+    </div>
+    <hr />
 </div>
 
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
-    
+        function ActualizarPresentacion(idPresentacion) {
+            const nombrePresentacion = $('#nuevoNombrePresentacion').val();
+            if (nombrePresentacion.length > 2) {
+                const dataString = "{ " +
+                    "\"idPresentacion\" : "+idPresentacion+"," +
+                    "\"nombrePresentacion\" : \"" + nombrePresentacion+"\" " +
+                    "}";
+                $.ajax({
+                    url: '@Url.Action("ActualizarPresentacion", "Miscelaneos")',
+                    type: 'POST',
+                    data: dataString,
+                    contentType: "application/json; charset=utf-8",
+                    async: true,
+                    success: function() {
+                        Swal.fire({
+                            title: 'Confirmado',
+                            text: 'Los datos han sido actualizados.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(response) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Información',
+                    text: 'Todos los datos son requeridos.',
+                    icon: 'info',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        }
     </script>
 }

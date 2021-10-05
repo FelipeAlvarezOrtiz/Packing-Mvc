@@ -61,7 +61,12 @@ namespace Packing.Mvc.Controllers.Miscelaneos
             var formato = await _context.Formatos.Where(formato => formato.IdFormato == request.idFormato)
                 .FirstOrDefaultAsync();
             if (formato is null) return BadRequest("El formato no existe.");
-            return Ok();
+            formato.NombreFormato = request.nombreFormato;
+            formato.UnidadPorFormato = request.unidadesPorFormato;
+            _context.Formatos.Update(formato);
+            return await _context.SaveChangesAsync() > 0
+                ? Ok()
+                : BadRequest("Ha ocurrido un error al actualizar los datos");
         }
 
         [HttpPost("ActualizarPresentacion")]
@@ -70,7 +75,9 @@ namespace Packing.Mvc.Controllers.Miscelaneos
             var presentacion = await _context.Presentaciones
                 .Where(presentacion => presentacion.IdPresentacion == request.idPresentacion).FirstOrDefaultAsync();
             if (presentacion is null) return BadRequest("La presentacion solicitada no existe.");
-            return Ok();
+            presentacion.NombrePresentacion = request.nombrePresentacion;
+            _context.Presentaciones.Update(presentacion);
+            return await _context.SaveChangesAsync() > 0 ? Ok() : BadRequest("Ha ocurrido un error al actualizar los datos.");
         }
 
         [HttpPost("ActualizarGrupo")]
@@ -78,7 +85,11 @@ namespace Packing.Mvc.Controllers.Miscelaneos
         {
             var grupo = await _context.Grupos.Where(grupo => grupo.IdGrupo == request.idGrupo).FirstOrDefaultAsync();
             if (grupo is null) return BadRequest("El grupo no existe.");
-            return Ok();
+            grupo.NombreGrupo = request.nombreGrupo;
+            _context.Grupos.Update(grupo);
+            return await _context.SaveChangesAsync() > 0
+                ? Ok()
+                : BadRequest("Ha ocurrido un error al actualizar los datos.");
         }
         
         

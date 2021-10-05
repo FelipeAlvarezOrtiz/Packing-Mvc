@@ -4,50 +4,71 @@
     var Formatos = ViewData["Formatos"] as List<Formato>;
     var Presentaciones = ViewData["Presentaciones"] as List<Presentacion>;
 }
+<a class="btn btn-info" asp-controller="Home" asp-action="VistaProductos"><i class="fas fa-arrow-left"></i>&nbsp;Volver atrás</a>
+<hr/>
+<h3><i class="fas fa-boxes"></i>&nbsp;Datos de presentaciones, grupos y formatos.</h3>
+<hr />
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
-            <table id="tablaGrupos">
-                <thead>
-                <tr>
-                    <th></th>
-                </tr>
+        <h4><i class="fas fa-tag"></i>&nbsp; Grupos</h4>
+        <div class="col-md-12">
+            <table id="tablaGrupos" class="table table-responsive-lg table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr class="text-center">
+                        <th class="text-center">Nombre de grupo</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var grupo in Grupos)
-                {
-                    
-                }
+                    @foreach (var grupo in Grupos)
+                    {
+                        <tr class="text-center">
+                            <td>@grupo.NombreGrupo</td>
+                            <td>
+                                <a class="btn-sm btn-info" asp-controller="Miscelaneos" asp-action="EditarGrupo" asp-route-idGrupo="@grupo.IdGrupo"><i class="far fa-edit"></i>&nbsp;Editar</a>
+                                @*<button class="btn-sm btn-danger text-white" onclick="BorrarGrupo(@grupo.IdGrupo)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>*@
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
     </div>
-    <br/>
-    <hr/>
+    <br />
+    <hr />
     <div class="row">
-        <div class="col-12">
-            <table>
-                <thead>
-                <tr>
-                    <th></th>
+        <h4><i class="fas fa-layer-group"></i>&nbsp; Formatos</h4>
+        <div class="col-md-12">
+            <table id="tablaFormatos" class="table table-responsive-lg table-striped table-bordered">
+                <thead class="thead-dark">
+                <tr class="text-center">
+                    <th class="text-center">Nombre de formato</th>
+                    <th class="text-center">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach (var formato in Formatos)
                 {
-                     
-                }   
+                    <tr class="text-center">
+                        <td>@formato.NombreFormato</td>
+                        <td>
+                            <a class="btn-sm btn-info" asp-controller="Miscelaneos" asp-action="EditarFormato" asp-route-idFormato="@formato.IdFormato"><i class="far fa-edit"></i>&nbsp;Editar</a>
+                            @*<button class="btn-sm btn-danger text-white" onclick="BorrarFormato(@formato.IdFormato)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>*@
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>
     </div>
-    <br/>
-    <hr/>
+    <br />
+    <hr />
     <div class="row">
-        <div class="col-12">
-            <table>
-                <thead>
-                <tr>
+        <div class="col-md-12">
+            <h4><i class="far fa-bookmark"></i>&nbsp;Presentaciones</h4>
+            <table id="tablaPresentaciones" class="table table-responsive-lg table-striped table-bordered">
+                <thead class="thead-dark">
+                <tr class="text-center">
                     <th>Nombre presentación</th>
                     <th>Acciones</th>
                 </tr>
@@ -55,11 +76,11 @@
                 <tbody>
                 @foreach (var presentacion in Presentaciones)
                 {
-                    <tr>
+                    <tr class="text-center">
                         <td>@presentacion.NombrePresentacion</td>
                         <td>
-                            <a class="btn btn-info">Editar</a>
-                            <a class="btn btn-danger">Borrar</a>
+                            <a class="btn-sm btn-info" asp-controller="Miscelaneos" asp-action="EditarPresentacion" asp-route-idPresentacion="@presentacion.IdPresentacion"><i class="far fa-edit"></i>&nbsp;Editar</a>
+                            @*<button type="button" class="btn-sm btn-danger text-white" onclick="BorrarPresentacion(@presentacion.IdPresentacion)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>*@
                         </td>
                     </tr>
                 }
@@ -72,8 +93,55 @@
 </div>
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
-    
+        $(document).ready(function () {
+            $('#tablaFormatos').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+            $('#tablaGrupos').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+            $('#tablaPresentaciones').DataTable({
+                responsive: true,
+                order: [[0, 'desc']],
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
+                stateSave: true,
+                dom: 'Bfrtip',
+                buttons: ['excel', 'pdf'],
+                language: {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
+                }
+            });
+        });
+
+        function BorrarGrupo(idGrupo) {
+
+        }
+
+        function BorrarPresentacion(idPresentacion) {
+
+        }
+
+        function BorrarFormato(idFormato) {
+
+        }
+
     </script>
 }

@@ -49,10 +49,10 @@
     </div>
     <br />
     <div class="row text-center">
-        <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="col-sm-6 col-md-6 col-lg-6">
             <a class="btn btn-info" asp-controller="Miscelaneos" asp-action="Index"><i class="far fa-edit"></i>&nbsp;Editar datos</a>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="col-sm-6 col-md-6 col-lg-6">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearProducto">
                 <i class="far fa-plus-square"></i>&nbsp;Crear nuevo producto
             </button>
@@ -246,6 +246,7 @@
                 lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todo"]],
                 stateSave: true,
                 dom: 'Bfrtip',
+                autoFill : true,
                 buttons: ['excel', 'pdf'],
                 language: {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Spanish.json"
@@ -501,7 +502,7 @@
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
                 cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Solicitar actualización',
+                confirmButtonText: 'Eliminar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {

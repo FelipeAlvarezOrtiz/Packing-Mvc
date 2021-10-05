@@ -12,4 +12,5 @@ namespace Packing.Mvc.Models.Empresas
     }
 
     public record ActualizarPresentacion(int idPresentacion, string nombrePresentacion);
+    public record EliminarPresentacion(int idPresentacion);
 }

@@ -50,7 +50,6 @@ namespace Packing.Mvc
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDg0NDQwQDMxMzkyZTMyMmUzMFBzTzR0c1o1a2ZPOHhyeXp1TW9CSlYxZmc3eUhKUU1xNUtHWEx5em9SVFk9");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -130,7 +130,6 @@ namespace Packing.Mvc.Controllers
             {
                 return BadRequest("El producto ya existe en su carro, ¿desea actualizar la cantidad del mismo?");
             }
-
             return Ok();
         }
 

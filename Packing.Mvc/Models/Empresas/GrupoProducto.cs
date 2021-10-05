@@ -13,4 +13,6 @@ namespace Packing.Mvc.Models.Empresas
     }
 
     public record ActualizarGrupo(int idGrupo, string nombreGrupo);
+
+    public record EliminarGrupo(int idGrupo);
 }

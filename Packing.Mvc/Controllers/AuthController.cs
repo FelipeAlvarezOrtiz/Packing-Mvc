@@ -35,7 +35,6 @@ namespace Packing.Mvc.Controllers
         public async Task<IActionResult> RegistrarInit()
         {
             await CrearRoles();
-            const string administrador = "Administrador";
             const string cliente = "Cliente";
             var user = new AppUser
             {

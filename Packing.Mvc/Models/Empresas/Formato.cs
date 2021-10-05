@@ -14,4 +14,6 @@ namespace Packing.Mvc.Models.Empresas
     }
     
     public record ActualizarFormato(int idFormato,string nombreFormato,int unidadesPorFormato);
+
+    public record EliminarFormato(int idFormato);
 }

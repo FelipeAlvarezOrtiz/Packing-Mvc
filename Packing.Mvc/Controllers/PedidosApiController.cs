@@ -49,26 +49,6 @@ namespace Packing.Mvc.Controllers
             return await _context.SaveChangesAsync() > 0 ? Ok(cabecera.ToString()) : BadRequest("Ha ocurrido un problema");
         }
 
-        [HttpPost("InsertarDetalle"), Authorize]
-        public async Task<IActionResult> InsertarDetallePedido([FromForm] string cabeceraPedido,[FromForm] int idProducto, [FromForm] int Observacion)
-        {
-            //var incEmpresa = await ObtenerEmpresa(idEmpresa);
-            //var incEstadoPedido = await ObtenerEstadoPedido(1);
-            //var cabecera = Guid.NewGuid();
-            //var CabeceraPedido = new Pedido
-            //{
-            //    GuidPedido = cabecera,
-            //    Estado = incEstadoPedido,
-            //    EmpresaMandante = incEmpresa,
-            //    Observacion = Observacion,
-            //    FechaPedido = DateTime.Now,
-            //    FechaUltimaActualizacion = DateTime.Now
-            //};
-            //await _context.Pedidos.AddAsync(CabeceraPedido);
-            //return await _context.SaveChangesAsync() > 0 ? Ok(cabecera.ToString()) : BadRequest("Ha ocurrido un problema");
-            return Ok();
-        }
-
         private async Task<Empresa> ObtenerEmpresa(int idEmpresa)
         {
             return await _context.Empresas.Where(emp => emp.IdEmpresa == idEmpresa).FirstAsync();

@@ -26,7 +26,7 @@
                             <td>@grupo.NombreGrupo</td>
                             <td>
                                 <a class="btn-sm btn-info" asp-controller="Miscelaneos" asp-action="EditarGrupo" asp-route-idGrupo="@grupo.IdGrupo"><i class="far fa-edit"></i>&nbsp;Editar</a>
-                                @*<button class="btn-sm btn-danger text-white" onclick="BorrarGrupo(@grupo.IdGrupo)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>*@
+                                <button class="btn-sm btn-danger text-white" onclick="BorrarGrupo(@grupo.IdGrupo)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>
                             </td>
                         </tr>
                     }
@@ -53,7 +53,7 @@
                         <td>@formato.NombreFormato</td>
                         <td>
                             <a class="btn-sm btn-info" asp-controller="Miscelaneos" asp-action="EditarFormato" asp-route-idFormato="@formato.IdFormato"><i class="far fa-edit"></i>&nbsp;Editar</a>
-                            @*<button class="btn-sm btn-danger text-white" onclick="BorrarFormato(@formato.IdFormato)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>*@
+                            <button class="btn-sm btn-danger text-white" onclick="BorrarFormato(@formato.IdFormato)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>
                         </td>
                     </tr>
                 }
@@ -80,7 +80,7 @@
                         <td>@presentacion.NombrePresentacion</td>
                         <td>
                             <a class="btn-sm btn-info" asp-controller="Miscelaneos" asp-action="EditarPresentacion" asp-route-idPresentacion="@presentacion.IdPresentacion"><i class="far fa-edit"></i>&nbsp;Editar</a>
-                            @*<button type="button" class="btn-sm btn-danger text-white" onclick="BorrarPresentacion(@presentacion.IdPresentacion)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>*@
+                            <button type="button" class="btn-sm btn-danger text-white" onclick="BorrarPresentacion(@presentacion.IdPresentacion)"><i class="fas fa-minus-circle"></i>&nbsp;Borrar</button>
                         </td>
                     </tr>
                 }
@@ -93,9 +93,9 @@
 </div>
 @section Scripts
 {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#tablaFormatos').DataTable({
                 responsive: true,
                 order: [[0, 'desc']],
@@ -132,15 +132,123 @@
         });
 
         function BorrarGrupo(idGrupo) {
-
+            Swal.fire({
+                title: 'Confirmación',
+                text: "Se va a eliminar este grupo, ¿está seguro que desea continuar?.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "@Url.Action("EliminarGrupo", "Miscelaneos")",
+                        type: "POST",
+                        data: "{ \"idGrupo\" : "+idGrupo+" }",
+                        contentType: "application/json; charset=utf-8",
+                        success: function() {
+                            Swal.fire({
+                                title: '¡Exito!',
+                                text: 'Se ha eliminado el grupo.',
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
+                            }).then(function() {
+                                location.reload();
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                title: '¡Error!',
+                                text: response.responseText,
+                                icon: 'error',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    });
+                }
+            });
         }
 
         function BorrarPresentacion(idPresentacion) {
-
+            Swal.fire({
+                title: 'Confirmación',
+                text: "Se va a eliminar esta presentación, ¿está seguro que desea continuar?.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "@Url.Action("EliminarPresentacion", "Miscelaneos")",
+                        type: "POST",
+                        data: "{ \"idPresentacion\" : "+idPresentacion+" }",
+                        contentType: "application/json; charset=utf-8",
+                        success: function() {
+                            Swal.fire({
+                                title: '¡Exito!',
+                                text: 'Se ha eliminado la presentación.',
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
+                            }).then(function() {
+                                location.reload();
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                title: '¡Error!',
+                                text: response.responseText,
+                                icon: 'error',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    });
+                }
+            });
         }
 
         function BorrarFormato(idFormato) {
-
+            Swal.fire({
+                title: 'Confirmación',
+                text: "Se va a eliminar este formato, ¿está seguro que desea continuar?.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "@Url.Action("EliminarFormato", "Miscelaneos")",
+                        type: "POST",
+                        data: "{ \"idFormato\" : "+idFormato+" }",
+                        contentType: "application/json; charset=utf-8",
+                        success: function() {
+                            Swal.fire({
+                                title: '¡Exito!',
+                                text: 'Se ha eliminado el formato.',
+                                icon: 'success',
+                                confirmButtonText: 'Ok'
+                            }).then(function() {
+                                location.reload();
+                            });
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                title: '¡Error!',
+                                text: response.responseText,
+                                icon: 'error',
+                                confirmButtonText: 'Ok'
+                            });
+                        }
+                    });
+                }
+            });
         }
 
     </script>

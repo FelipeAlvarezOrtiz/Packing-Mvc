@@ -57,10 +57,8 @@ namespace Packing.Mvc.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-
-        public async Task<IActionResult> OnPostUpdateDatosAsync()
+        public IActionResult OnPostUpdateDatosAsync()
         {
-            Console.WriteLine("Cambiado");
             return RedirectToPage();
         }
     }

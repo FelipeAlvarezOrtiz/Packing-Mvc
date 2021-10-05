@@ -91,7 +91,54 @@ namespace Packing.Mvc.Controllers.Miscelaneos
                 ? Ok()
                 : BadRequest("Ha ocurrido un error al actualizar los datos.");
         }
-        
-        
+
+        [HttpPost("EliminarGrupo")]
+        public async Task<ActionResult> EliminarGrupo([FromBody]EliminarGrupo request)
+        {
+            var productoConGrupo = await _context.Productos.Include(producto => producto.Grupo)
+                .Where(producto => producto.Grupo.IdGrupo == request.idGrupo).FirstOrDefaultAsync();
+            if (productoConGrupo is not null)
+                return BadRequest(
+                    "Ese grupo está asociado a un producto, prueba cambiando el nombre o eliminar el producto asociado");
+            var grupo = await _context.Grupos.Where(grupo => grupo.IdGrupo == request.idGrupo).FirstOrDefaultAsync();
+            if (grupo is null) return BadRequest("Ese grupo no existe.");
+            _context.Remove(grupo);
+            return await _context.SaveChangesAsync() > 0
+                ? Ok()
+                : BadRequest("Ha ocurrido un error al eliminar ese grupo, intenta más tarde.");
+        }
+
+        [HttpPost("EliminarFormato")]
+        public async Task<ActionResult> EliminarFormato([FromBody] EliminarFormato request)
+        {
+            var productoConFormato = await _context.Productos.Include(producto => producto.Formato)
+                .Where(producto => producto.Formato.IdFormato == request.idFormato).FirstOrDefaultAsync();
+            if (productoConFormato is not null)
+                return BadRequest(
+                    "Ese formato está asociado a un producto, prueba cambiando el nombre o eliminar el producto asociado");
+            var formato = await _context.Formatos.Where(formato => formato.IdFormato == request.idFormato).FirstOrDefaultAsync();
+            if (formato is null) return BadRequest("Ese formato no existe.");
+            _context.Remove(formato);
+            return await _context.SaveChangesAsync() > 0
+                ? Ok()
+                : BadRequest("Ha ocurrido un error al eliminar ese formato, intenta más tarde.");
+        }
+
+        [HttpPost("EliminarPresentacion")]
+        public async Task<ActionResult> EliminarPresentacion([FromBody] EliminarPresentacion request)
+        {
+            var productoConPresentacion = await _context.Productos.Include(producto => producto.Presentacion)
+                .Where(producto => producto.Presentacion.IdPresentacion == request.idPresentacion).FirstOrDefaultAsync();
+            if (productoConPresentacion is not null)
+                return BadRequest(
+                    "Esa presentación está asociado a un producto, prueba cambiando el nombre o eliminar el producto asociado");
+            var presentacion = await _context.Presentaciones.Where(presentacion => presentacion.IdPresentacion == request.idPresentacion).FirstOrDefaultAsync();
+            if (presentacion is null) return BadRequest("Esa presentación no existe.");
+            _context.Remove(presentacion);
+            return await _context.SaveChangesAsync() > 0
+                ? Ok()
+                : BadRequest("Ha ocurrido un error al eliminar esa presentacion, intenta más tarde.");
+        }
     }
+
 }

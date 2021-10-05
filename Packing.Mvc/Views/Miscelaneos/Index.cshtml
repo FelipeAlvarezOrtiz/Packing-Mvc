@@ -1,0 +1,79 @@
+@using Packing.Mvc.Models.Empresas
+@{
+    var Grupos = ViewData["Grupos"] as List<GrupoProducto>;
+    var Formatos = ViewData["Formatos"] as List<Formato>;
+    var Presentaciones = ViewData["Presentaciones"] as List<Presentacion>;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <table id="tablaGrupos">
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var grupo in Grupos)
+                {
+                    
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+    <div class="row">
+        <div class="col-12">
+            <table>
+                <thead>
+                <tr>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var formato in Formatos)
+                {
+                     
+                }   
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+    <div class="row">
+        <div class="col-12">
+            <table>
+                <thead>
+                <tr>
+                    <th>Nombre presentación</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var presentacion in Presentaciones)
+                {
+                    <tr>
+                        <td>@presentacion.NombrePresentacion</td>
+                        <td>
+                            <a class="btn btn-info">Editar</a>
+                            <a class="btn btn-danger">Borrar</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+    <hr>
+</div>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script type="text/javascript">
+    
+    </script>
+}

@@ -11,4 +11,6 @@ namespace Packing.Mvc.Models.Empresas
         public string NombreGrupo { get; set; }
         public string Imagen { get; set; }
     }
+
+    public record ActualizarGrupo(int idGrupo, string nombreGrupo);
 }

@@ -12,4 +12,6 @@ namespace Packing.Mvc.Models.Empresas
         public int UnidadPorFormato { get; set; }
         
     }
+    
+    public record ActualizarFormato(int idFormato,string nombreFormato,int unidadesPorFormato);
 }

@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
 using Packing.Mvc.Data;
-using Packing.Mvc.Models.Dtos;
 using Packing.Mvc.Models.Empresas;
 
 namespace Packing.Mvc.Controllers.Productos
@@ -35,28 +33,37 @@ namespace Packing.Mvc.Controllers.Productos
         [HttpPost("GuardarGrupo"), Authorize(Roles = "Administrador")]
         public async Task<ActionResult> GuardarGrupo([FromForm] string nombreGrupo, IFormFile archivo, CancellationToken cancellationToken)
         {
-            if (await ExisteGrupoPorNombre(nombreGrupo))
+            try
             {
-                return BadRequest("El grupo ya existe");
+                if (await ExisteGrupoPorNombre(nombreGrupo))
+                {
+                    return BadRequest("El grupo ya existe");
+                }
+
+                if (archivo.Length <= 0) return BadRequest("El archivo no puede estar vacio");
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productos/",
+                    archivo.FileName);
+                if (System.IO.File.Exists(filePath))
+                    return BadRequest("Ya existe un archivo guardado con ese nombre asociado a otro grupo.");
+                await using (var stream = System.IO.File.Create(filePath))
+                {
+                    await archivo.CopyToAsync(stream, cancellationToken);
+                }
+
+                await _context.Grupos.AddAsync(new GrupoProducto()
+                {
+                    NombreGrupo = nombreGrupo,
+                    Imagen = archivo.FileName
+                }, cancellationToken);
+                return await _context.SaveChangesAsync(cancellationToken) > 0
+                    ? Ok()
+                    : BadRequest("Ha ocurrido un error interno, intentelo más tarde o contacte al dev.");
             }
-
-            if (archivo.Length <= 0) return BadRequest("El archivo no puede estar vacio");
-            
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/productos/", archivo.FileName);
-
-            await using (var stream = System.IO.File.Create(filePath))
+            catch (Exception error)
             {
-                await archivo.CopyToAsync(stream,cancellationToken);
+                return BadRequest(error.Message);
             }
-            await _context.Grupos.AddAsync(new GrupoProducto()
-            {
-                NombreGrupo = nombreGrupo,
-                Imagen = archivo.FileName
-            },cancellationToken);
-
-            return await _context.SaveChangesAsync(cancellationToken) > 0
-                ? Ok()
-                : BadRequest("Ha ocurrido un error interno, intentelo más tarde o contacte al dev.");
         }
 
         private async Task<bool> ExisteGrupoPorNombre(string nombreGrupo)

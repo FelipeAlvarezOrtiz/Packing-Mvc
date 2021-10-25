@@ -24,4 +24,8 @@
     <Folder Include="TemplatesCorreos\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Packing.Core\Packing.Core.csproj" />
+  </ItemGroup>
+
 </Project>

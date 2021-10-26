@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packing.Core", "Packing.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packing.Persistencia", "Packing.Persistencia\Packing.Persistencia.csproj", "{19413B8A-8984-4BB1-91B0-0C81F045B9B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Packing.Negocio", "Packing.Negocio\Packing.Negocio.csproj", "{102FBA90-5100-462A-AFEE-F703B105FC52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{19413B8A-8984-4BB1-91B0-0C81F045B9B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19413B8A-8984-4BB1-91B0-0C81F045B9B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19413B8A-8984-4BB1-91B0-0C81F045B9B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{102FBA90-5100-462A-AFEE-F703B105FC52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{102FBA90-5100-462A-AFEE-F703B105FC52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{102FBA90-5100-462A-AFEE-F703B105FC52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{102FBA90-5100-462A-AFEE-F703B105FC52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

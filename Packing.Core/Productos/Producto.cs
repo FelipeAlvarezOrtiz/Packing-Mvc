@@ -9,7 +9,6 @@ namespace Packing.Core.Productos
         public int IdProducto { get; set; }
         [MinLength(5, ErrorMessage = "No cumple con la cantidad mínima de carácteres"), MaxLength(50, ErrorMessage = "Cantidad de carácteres máximos excedidos"), Required(ErrorMessage = "El dato es requerido.")]
         public string NombreProducto { get; set; }
-        public bool Disponibilidad { get; set; }
         public string RutaImagen { get; set; }
         public Presentacion Presentacion { get; set; }
         public Formato Formato { get; set; }

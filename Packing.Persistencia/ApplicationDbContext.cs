@@ -9,10 +9,7 @@ namespace Packing.Persistencia
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<AppUser> Usuarios { get; set; }
         public DbSet<Empresa> Empresas { get; set; }
